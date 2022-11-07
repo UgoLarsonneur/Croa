@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+        _instance = this;
     }
 
     private void Update() {

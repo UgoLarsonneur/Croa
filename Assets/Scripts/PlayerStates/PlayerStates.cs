@@ -23,6 +23,7 @@ namespace PlayerStates
         public override void enter()
         {
             _startTime = Time.time;
+            EventManager.TriggerEvent("Charge");
         }
 
         public override void update()
@@ -53,6 +54,8 @@ namespace PlayerStates
         {
             _startTime = Time.time;
             _startPos = Owner.transform.position;
+
+            EventManager.TriggerEvent("Jump");
 
             //set rotation
             //init animation

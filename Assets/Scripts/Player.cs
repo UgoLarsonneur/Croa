@@ -27,9 +27,6 @@ public class Player : MonoBehaviour
     public AnimationCurve JumpShape {get => jumpShape;}
     public AnimationCurve ChargeMaxHeight {get => chargeMaxHeight;}
 
-    /*___Objects refs___*/
-    [SerializeField] GameObject jumpTarget;
-
 
 
     /*___Turning___*/
