@@ -7,12 +7,12 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance;
     public static GameManager Instance {
         get {
-            if(_instance == null)
+            /*if(_instance == null)
             {
                 GameObject gameObject = new GameObject();
                 _instance = gameObject.AddComponent<GameManager>();
                 gameObject.name = "GameManager";
-            }
+            }*/
 
             return _instance;
         }
