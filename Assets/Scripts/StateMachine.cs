@@ -7,10 +7,10 @@ using UnityEngine;
 public class StateMachine<T>
 {
     protected T _owner;
-    public T Owner {get => _owner;}
+    protected State<T> _currentState;
 
-    protected State<T> currentState;
-    public State<T> CurrentState {get => currentState; set => setState(value);}
+    public State<T> CurrentState {get => _currentState; set => setState(value);}
+    public T Owner => _owner;
 
     public StateMachine(T owner)
     {
@@ -18,22 +18,22 @@ public class StateMachine<T>
     }
 
     public virtual void update() {
-        if(currentState == null)
+        if(_currentState == null)
             Debug.LogError("No state to execute");
         else
-            currentState.update();
+            _currentState?.update();
     }
 
     public virtual void fixedUpdate() {
-        currentState.fixedUpdate();
+        _currentState?.fixedUpdate();
     }
 
     public void setState(State<T> newState)
     {
-        currentState?.exit();
+        _currentState?.exit();
 
-        currentState = newState;
-        newState.enter();
+        _currentState = newState;
+        newState?.enter();
     }
 }
 

@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Water
+    uniqueID: 1765606945
+    locked: 0
+  - name: Crosshair
+    uniqueID: 1173317793
+    locked: 0
+  - name: Frog
+    uniqueID: 1357794109
+    locked: 0
