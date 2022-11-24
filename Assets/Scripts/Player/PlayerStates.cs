@@ -2,98 +2,123 @@ using UnityEngine;
 
 namespace PlayerStates
 {
-    public class PlayerIdle : State<Player>
+    public class Idle : State<Player>
     {
-        public PlayerIdle(StateMachine<Player> stateMachine) : base(stateMachine) {}
+        public Idle(StateMachine<Player> stateMachine) : base(stateMachine) {}
 
-        public override void update()
+        public override void Update()
         {
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                _stateMachine.setState(new PlayerChargeTimed(_stateMachine));
+                StateMachine.CurrentState = new JumpPhase(StateMachine);
             }
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
         }
     }
 
-    /// <summary>
-    /// Créée au cas où je veux d'autre moyen de charger le saut
-    /// </summary>
-    public abstract class PlayerCharge : State<Player>
+    public class Idle2 : State<Player>
     {
-        protected float _charge = 0f;
-        public float Charge => _charge;
+        public Idle2(StateMachine<Player> stateMachine) : base(stateMachine) {}
 
-        protected float _angle;
-        public float Angle => _angle;
-        
-        public PlayerCharge(StateMachine<Player> stateMachine, float angle = 0f) : base(stateMachine)
+        public override void Update()
         {
-            _angle = angle;
+            if(Input.GetKeyDown(KeyCode.J))
+            {
+                StateMachine.CurrentState = new JumpPhase(StateMachine);
+            }
         }
 
-        public override void enter()
+        public override void Exit()
+        {
+            base.Exit();
+        }
+    }
+
+    public class JumpPhase : SuperState<Player>
+    {
+        public float Charge {get; set;} = 0f;
+
+        public float Angle {get; set;} = 0f;
+
+        StateMachine<JumpPhase> _subStateMachine;
+
+        public JumpPhase(StateMachine<Player> stateMachine) : base(stateMachine) {}
+
+        public override void Enter()
+        {
+            base.Enter();
+            SubStateMachine.CurrentState = new ChargingTimed(this);
+        }
+    }
+
+    public abstract class Charging : SubState<Player, JumpPhase>
+    {
+        
+        public Charging(JumpPhase superState) : base(superState) {}
+
+        public override void Enter()
         {
             EventManager.TriggerEvent("Charge");
         }
 
-        public override void update()
+        public override void Update()
         {
             float angleDelta = 0f;
             if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow))
             {
                 angleDelta += 1f;
             }
-            if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.R))
+            if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.RightArrow))
             {
                 angleDelta -= 1f;
             }
 
-            _angle = Mathf.Clamp(_angle + angleDelta * Time.deltaTime * Owner.TurnSpeed, -Owner.MaxTurnAngle, Owner.MaxTurnAngle);
+            SuperState.Angle = Mathf.Clamp(SuperState.Angle + angleDelta * Time.deltaTime * Owner.TurnSpeed, -Owner.MaxTurnAngle, Owner.MaxTurnAngle);
         }
     }
 
-    public class PlayerChargeTimed : PlayerCharge
+    public class ChargingTimed : Charging
     {
         private float _startTime;
         
-        public PlayerChargeTimed(StateMachine<Player> stateMachine, float angle = 0f) : base(stateMachine, angle) {}
+        public ChargingTimed(JumpPhase superState) : base(superState) {}
 
-        public override void enter()
+        public override void Enter()
         {
-            base.enter();
+            base.Enter();
             _startTime = Time.time;
         }
 
-        public override void update()
+        public override void Update()
         {
-            base.update();
+            base.Update();
             
-            _charge = Mathf.Clamp01((Time.time - _startTime) / Owner.ChargeDuration);
+            SuperState.Charge = Mathf.Clamp01((Time.time - _startTime) / Owner.ChargeDuration);
 
-            if(Input.GetKeyUp(KeyCode.Space) || _charge >= 1f)
+            if(Input.GetKeyUp(KeyCode.Space) || SuperState.Charge >= 1f)
             {
-                _stateMachine.setState(new PlayerJumping(_stateMachine, _charge, _angle)); 
+                StateMachine.CurrentState = new Jumping(SuperState); 
             }
         }
     }
 
-    public class PlayerJumping : State<Player>
+    public class Jumping : SubState<Player, JumpPhase>
     {
-        private float _charge;
         private Vector3 _startPos;
         private float _startTime;
         private float _duration;
-        private float _angle;
         
 
-        public PlayerJumping(StateMachine<Player> stateMachine, float charge, float angle) : base(stateMachine)
+        public Jumping(JumpPhase superState) : base(superState)
         {
-            _angle = angle;
-            _charge = charge;
-            _duration = Mathf.Lerp(Owner.MinJumpDuration, Owner.MaxJumpDuration, _charge);
+            _duration = Mathf.Lerp(Owner.MinJumpDuration, Owner.MaxJumpDuration, SuperState.Charge);
         }
 
-        public override void enter()
+        public override void Enter()
         {
             _startTime = Time.time;
             _startPos = Owner.transform.position;
@@ -104,24 +129,22 @@ namespace PlayerStates
             //init animation
         }
 
-        public override void exit()
+        public override void Exit()
         {
             //init animation
         }
 
-        public override void update()
+        public override void Update()
         {
-            float jumpTime = Mathf.Clamp01((Time.time - _startTime) / Mathf.Lerp(Owner.MinJumpDuration, Owner.MaxJumpDuration, _charge));
+            float jumpTime = Mathf.Clamp01((Time.time - _startTime) / Mathf.Lerp(Owner.MinJumpDuration, Owner.MaxJumpDuration, SuperState.Charge));
 
-            Owner.transform.position = _startPos + Quaternion.AngleAxis(_angle, Vector3.up) * 
+            Owner.transform.position = _startPos + Quaternion.AngleAxis(SuperState.Angle, Vector3.up) * 
                 new Vector3( 0f,
-                Owner.JumpShape.Evaluate(jumpTime) * Owner.ChargeMaxHeight.Evaluate(_charge) * Owner.MaxJumpHeight,
-                Owner.getJumpDistance(_charge) * jumpTime);
+                Owner.JumpShape.Evaluate(jumpTime) * Owner.ChargeMaxHeight.Evaluate(SuperState.Charge) * Owner.MaxJumpHeight,
+                Owner.getJumpDistance(SuperState.Charge) * jumpTime);
 
             if(jumpTime >= 1f)
-                _stateMachine.setState(new PlayerIdle(_stateMachine));
-        }
-        
+                Owner.StateMachine.CurrentState = new Idle(Owner.StateMachine);
+        }   
     }
-
 }

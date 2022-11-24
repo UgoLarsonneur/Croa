@@ -46,23 +46,23 @@ public class TargetUI : MonoBehaviour
     StateMachine<TargetUI> _stateMachine;
 }
 
-namespace TargetUIStates
+/* namespace TargetUIStates
 {
     public abstract class Neutral<T> : State<T> where T : TargetUI
     {
         public Neutral(StateMachine<T> stateMachine) : base(stateMachine) {}
 
-        public override void enter()
+        public override void Enter()
         {
-            base.enter();
+            base.Enter();
             EventManager.StartListening("Charge", OnCharge);
         }
 
         public abstract void OnCharge();
 
-        public override void exit()
+        public override void Exit()
         {
-            base.exit();
+            base.Exit();
             EventManager.StopListening("Charge", OnCharge);
         }
     }
@@ -71,18 +71,19 @@ namespace TargetUIStates
     {
         public Charge(StateMachine<T> stateMachine) : base(stateMachine) {}
 
-        public override void enter()
+        public override void Enter()
         {
-            base.enter();
-            EventManager.StartListening("Jump", OnCharge);
+            base.Enter();
+            EventManager.StartListening("Jump", OnJump);
         }
 
-        public abstract void OnCharge();
+        public abstract void OnJump();
 
-        public override void exit()
+        public override void Exit()
         {
-            base.exit();
-            EventManager.StopListening("Jump", OnCharge);
+            base.Exit();
+            EventManager.StopListening("Jump", OnJump);
         }
     }
 }
+ */

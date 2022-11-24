@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerStates;
 
 
 public class Player : MonoBehaviour
@@ -26,7 +25,8 @@ public class Player : MonoBehaviour
     public float MaxJumpHeight => maxJumpHeight;
     public AnimationCurve JumpShape => jumpShape;
     public AnimationCurve ChargeMaxHeight => chargeMaxHeight;
-    
+
+
 
     /*___Turning___*/
     [SerializeField] float turnSpeed;
@@ -35,16 +35,18 @@ public class Player : MonoBehaviour
     public float TurnSpeed => turnSpeed;
     public float MaxTurnAngle => maxTurnAngle;
 
-    StateMachine<Player> _stateMachine;
-    public StateMachine<Player> SM => _stateMachine;
+    public StateMachine<Player> StateMachine {get; protected set;}
+
+    private float angle = 0f;
+    public float Angle { get => angle; set => angle = value; }
 
     private void Awake() {
-        _stateMachine = new StateMachine<Player>(this);
-        _stateMachine.setState(new PlayerStates.PlayerIdle(_stateMachine));
+        StateMachine = new StateMachine<Player>(this);
+        StateMachine.CurrentState = new PlayerStates.Idle(StateMachine);
     }
     
     private void Update() {
-        _stateMachine.update();
+        StateMachine.Update();
 
         if(Input.GetKeyDown(KeyCode.R))
         {
@@ -53,7 +55,7 @@ public class Player : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        _stateMachine.fixedUpdate();
+        StateMachine.FixedUpdate();
     }
 
     public float getJumpDistance(float charge)
@@ -61,9 +63,14 @@ public class Player : MonoBehaviour
         return MinJumpDist + (MaxJumpDist - MinJumpDist) * charge;
     }
 
+    public float getJumpLength(float charge)
+    {
+        return MinJumpDuration + (MaxJumpDuration - MinJumpDuration) * charge;
+    }
+
     private void OnGUI() {
         if(GameManager.Instance.DebugEnabled)
-            GUILayout.Box("Player State: " + _stateMachine.CurrentState.ToString());
+            GUILayout.Box("Player State: " + StateMachine.CurrentState.ToString());
     }
     
 }
