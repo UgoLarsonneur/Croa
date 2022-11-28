@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     /*___Turning___*/
     [SerializeField] float turnSpeed;
     [SerializeField] float maxTurnAngle;
+    
 
     public float TurnSpeed => turnSpeed;
     public float MaxTurnAngle => maxTurnAngle;

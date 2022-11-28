@@ -144,7 +144,10 @@ namespace PlayerStates
                 Owner.getJumpDistance(SuperState.Charge) * jumpTime);
 
             if(jumpTime >= 1f)
+            {
+                EventManager.TriggerEvent("Land");
                 Owner.StateMachine.CurrentState = new Idle(Owner.StateMachine);
+            }
         }   
     }
 }

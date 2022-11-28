@@ -36,13 +36,13 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 4970341849405139396}
-    m_Position: {x: 370, y: 10, z: 0}
+    m_Position: {x: 370, y: -70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5502926568256998224}
     m_Position: {x: 570, y: 220, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5929384746882893274}
-    m_Position: {x: 200, y: 220, z: 0}
+    m_Position: {x: 160, y: 270, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -84,7 +84,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FrogAnim
+  m_Name: FrogAnim2
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Charge
@@ -164,7 +164,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400004, guid: 208ee8a759f177e498e9e0e3bd374e92, type: 3}
+  m_Motion: {fileID: -491678979986718739, guid: 33a0fa08b1b7da04c861dbf182f3253c,
+    type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -191,7 +192,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400002, guid: 208ee8a759f177e498e9e0e3bd374e92, type: 3}
+  m_Motion: {fileID: -8800838248204228948, guid: 33a0fa08b1b7da04c861dbf182f3253c,
+    type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -219,7 +221,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400006, guid: 5c85540ab2973b8459fea71c593397a5, type: 3}
+  m_Motion: {fileID: -7861037764357068360, guid: 33a0fa08b1b7da04c861dbf182f3253c,
+    type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
