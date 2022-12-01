@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     public bool DebugEnabled => _debugEnabled;
 
     [SerializeField] private Player player;
-    public Player Player => player;
+    public static Player Player => Instance.player;
 
     private void Awake() {
         if(Instance != null && Instance != this)

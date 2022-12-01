@@ -313,7 +313,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1092597813}
-  maxSpeed: 1
+  maxSpeed: 0.5
+  lockedAxis:
+    x: 1
+    y: 1
+    z: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0

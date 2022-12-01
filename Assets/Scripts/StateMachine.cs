@@ -1,5 +1,4 @@
-using System;
-using System.Runtime.InteropServices;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +6,8 @@ using UnityEngine;
 
 public class StateMachine<T>
 {
-    protected State<T> _currentState;
-    public State<T> CurrentState {
+    protected IState<T> _currentState;
+    public IState<T> CurrentState {
         get {
             return _currentState;
         }
@@ -28,41 +27,31 @@ public class StateMachine<T>
     }
 
     public virtual void Update() {
-    if(_currentState == null)
-        Debug.LogError("No state to execute");
-    else
-        _currentState?.Update();
+        CurrentState?.Update();
     }
 
     public virtual void FixedUpdate() {
-        _currentState?.FixedUpdate();
+        CurrentState?.FixedUpdate();
     }
 }
 
-
-
-/// <summary>
-/// 
-/// </summary>
-/// <typeparam name="T">Base object using the states</typeparam>
-/// <typeparam name="B">Type of the state executing the states</typeparam>
-public class SubStateMachine<T, B> : StateMachine<T> where B : State<T>
+public interface IState
 {
-    protected B _baseStateMachine;
-    public B BaseSubMachine => _baseStateMachine;
-
-    public SubStateMachine(B baseStateMachine) : base(baseStateMachine.Owner)
-    {
-        _baseStateMachine = baseStateMachine;
-    }
+    public void Enter();
+    public void Exit();
+    public void Update();
+    public void FixedUpdate();
 }
 
-
-
-public class State<T>
+public interface IState<T> : IState
 {
-    public StateMachine<T> StateMachine {get; protected set;}
-    public virtual T Owner {get => StateMachine.Owner;}
+    public T Owner{get;}
+}
+
+public abstract class State<T> : IState<T>
+{
+    protected StateMachine<T> StateMachine {get;}
+    public T Owner {get => StateMachine.Owner;}
 
     public State(StateMachine<T> stateMachine)
     {
@@ -114,6 +103,11 @@ public class SuperState<T> : State<T>
         }
     }
 
+    public override string ToString()
+    {
+        return base.ToString()+"/"+SubStateMachine.CurrentState.ToString();
+    }
+
 }
 
 /// <summary>
@@ -125,8 +119,19 @@ public class SubState<T, S> : State<T> where S : SuperState<T>
 {
     protected S SuperState {get;}
 
-    public SubState(S superState) : base(superState.StateMachine)
+    public SubState(S superState) : base(superState.SubStateMachine)
     {
         SuperState = superState;
     }
+}
+
+
+public abstract class SubState2<T> : StateMachine<T>, IState<T>
+{
+    protected StateMachine<T> StateMachine {get;}
+
+    public SubState2(T owner) : base(owner) {}
+
+    public virtual void Enter(){}
+    public virtual void Exit(){}
 }

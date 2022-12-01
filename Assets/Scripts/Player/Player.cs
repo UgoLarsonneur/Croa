@@ -38,8 +38,8 @@ public class Player : MonoBehaviour
 
     public StateMachine<Player> StateMachine {get; protected set;}
 
-    private float angle = 0f;
-    public float Angle { get => angle; set => angle = value; }
+    private float _angle = 0f;
+    public float Angle { get => _angle; set => _angle = value; }
 
     private void Awake() {
         StateMachine = new StateMachine<Player>(this);

@@ -3,21 +3,22 @@ using UnityEngine;
 public class FollowTarget : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private float maxSpeed = 0.2f;
+    [SerializeField] private float smoothTime = 0.2f;
 
-    private Vector3 _currentVelocity;
-    private Vector3 _offset;
+    private float _currentVelocity;
+    private float _offset;
 
     private void Start() {
-        _offset = transform.position - target.position;
+        _offset = transform.position.z - target.position.z;
     }
     
     protected void Update()
     {
-        transform.position = Vector3.SmoothDamp(
-            transform.position,
-            target.position + _offset,
+        float newZ = Mathf.SmoothDamp(
+            transform.position.z,
+            target.position.z + _offset,
             ref _currentVelocity,
-            maxSpeed);
+            smoothTime);
+        transform.position = new Vector3(transform.position.x, transform.position.y, newZ);
     }
 }

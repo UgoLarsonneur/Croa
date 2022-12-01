@@ -9,7 +9,6 @@ public class TargetLine : MonoBehaviour
     [SerializeField] private float scrollSpeed;
 
     private LineRenderer _lineRenderer;
-    private bool _isCharging = false;
 
     private void Awake() {
         _lineRenderer = GetComponent<LineRenderer>();
@@ -20,31 +19,30 @@ public class TargetLine : MonoBehaviour
     private void Start() {
         EventManager.StartListening("Charge", OnCharge);
         EventManager.StartListening("Jump", OnJump);
+        enabled = false;
     }
 
     private void OnCharge()
     {
-        _isCharging = true;
-        _lineRenderer.enabled = true;
         UpdatePos();
+        enabled = true;
+        _lineRenderer.enabled = true;
     }
 
     private void OnJump()
     {
-        _isCharging = false;
+        enabled = false;
         _lineRenderer.enabled = false;
     }
+
     protected void LateUpdate()
     {
-        if(_isCharging)
-        {
-            UpdatePos();
-            _lineRenderer.material.mainTextureOffset -= new Vector2(scrollSpeed * Time.deltaTime, 0f);
-        }
+        UpdatePos();
     }
 
     private void UpdatePos()
     {
+        _lineRenderer.material.mainTextureOffset -= new Vector2(scrollSpeed * Time.deltaTime, 0f);
         _lineRenderer.SetPosition(1, point1.position);
         _lineRenderer.SetPosition(0, point0.position);
     }

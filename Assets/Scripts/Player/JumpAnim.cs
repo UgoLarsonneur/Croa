@@ -7,11 +7,11 @@ public class JumpAnim : StateMachineBehaviour
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Player player = GameManager.Instance.Player;
-        float charge = ((PlayerStates.JumpPhase)GameManager.Instance.Player.StateMachine.CurrentState).Charge;
+        Player player = GameManager.Player;
+        float charge = ((PlayerStates.JumpPhase)player.StateMachine.CurrentState).Charge;
 
         float targetLength = player.getJumpLength(charge);
-        animator.speed = targetLength / stateInfo.length;
+        animator.speed = stateInfo.length / targetLength ;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

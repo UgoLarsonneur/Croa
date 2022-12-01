@@ -20,29 +20,11 @@ namespace PlayerStates
         }
     }
 
-    public class Idle2 : State<Player>
-    {
-        public Idle2(StateMachine<Player> stateMachine) : base(stateMachine) {}
-
-        public override void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.J))
-            {
-                StateMachine.CurrentState = new JumpPhase(StateMachine);
-            }
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
-        }
-    }
-
     public class JumpPhase : SuperState<Player>
     {
         public float Charge {get; set;} = 0f;
 
-        public float Angle {get; set;} = 0f;
+        //public float Angle {get; set;} = 0f;
 
         StateMachine<JumpPhase> _subStateMachine;
 
@@ -77,7 +59,7 @@ namespace PlayerStates
                 angleDelta -= 1f;
             }
 
-            SuperState.Angle = Mathf.Clamp(SuperState.Angle + angleDelta * Time.deltaTime * Owner.TurnSpeed, -Owner.MaxTurnAngle, Owner.MaxTurnAngle);
+            /*SuperState*/Owner.Angle = Mathf.Clamp(/*SuperState*/Owner.Angle + angleDelta * Time.deltaTime * Owner.TurnSpeed, -Owner.MaxTurnAngle, Owner.MaxTurnAngle);
         }
     }
 
@@ -138,7 +120,7 @@ namespace PlayerStates
         {
             float jumpTime = Mathf.Clamp01((Time.time - _startTime) / Mathf.Lerp(Owner.MinJumpDuration, Owner.MaxJumpDuration, SuperState.Charge));
 
-            Owner.transform.position = _startPos + Quaternion.AngleAxis(SuperState.Angle, Vector3.up) * 
+            Owner.transform.position = _startPos + Quaternion.AngleAxis(/*SuperState*/Owner.Angle, Vector3.up) * 
                 new Vector3( 0f,
                 Owner.JumpShape.Evaluate(jumpTime) * Owner.ChargeMaxHeight.Evaluate(SuperState.Charge) * Owner.MaxJumpHeight,
                 Owner.getJumpDistance(SuperState.Charge) * jumpTime);
@@ -148,6 +130,7 @@ namespace PlayerStates
                 EventManager.TriggerEvent("Land");
                 Owner.StateMachine.CurrentState = new Idle(Owner.StateMachine);
             }
+                
         }   
     }
 }

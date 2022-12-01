@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerAnimHandler : MonoBehaviour
 {
+    [SerializeField] float turnLength = 0.1f;
+
     Animator _animator;
 
     int _landTriggerHash;
@@ -28,6 +31,10 @@ public class PlayerAnimHandler : MonoBehaviour
     void LaunchJumpAnim()
     {
         _animator.SetTrigger(_jumpTriggerHash);
+        //PlayerStates.JumpPhase jumpPhase = (PlayerStates.JumpPhase)GameManager.Player.StateMachine.CurrentState;
+        //transform.DORotate(new Vector3(0f, jumpPhase.Angle, 0f), turnLength).SetEase(Ease.OutQuint);
+        transform.DORotate(new Vector3(0f, GameManager.Player.Angle, 0f), turnLength).SetEase(Ease.OutQuint);
+        
     }
 
     void LaunchChargeAnim()
@@ -38,5 +45,6 @@ public class PlayerAnimHandler : MonoBehaviour
     void LaunchIdleAnim()
     {
         _animator.SetTrigger(_landTriggerHash);
+        transform.DORotate(new Vector3(0f, 0f, 0f), turnLength).SetEase(Ease.InOutQuad);
     }
 }
