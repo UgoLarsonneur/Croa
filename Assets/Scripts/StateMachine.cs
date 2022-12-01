@@ -4,7 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class StateMachine<T>
+public interface IStateMachine<T>
+{
+    public IState<T> CurrentState{get; set;}
+    public T Owner {get;}
+}
+
+
+public class StateMachine<T> : IStateMachine<T>
 {
     protected IState<T> _currentState;
     public IState<T> CurrentState {
@@ -35,25 +42,23 @@ public class StateMachine<T>
     }
 }
 
-public interface IState
+
+public interface IState<T>
 {
+    public T Owner{get;}
     public void Enter();
     public void Exit();
     public void Update();
     public void FixedUpdate();
 }
 
-public interface IState<T> : IState
-{
-    public T Owner{get;}
-}
 
 public abstract class State<T> : IState<T>
 {
-    protected StateMachine<T> StateMachine {get;}
+    protected IStateMachine<T> StateMachine {get;}
     public T Owner {get => StateMachine.Owner;}
 
-    public State(StateMachine<T> stateMachine)
+    public State(IStateMachine<T> stateMachine)
     {
         StateMachine = stateMachine;
     }
@@ -70,11 +75,41 @@ public abstract class State<T> : IState<T>
 }
 
 
+public abstract class SequencedState<T> : StateMachine<T>, IState<T>
+{
+    protected IStateMachine<T> StateMachine {get;}
+
+    public SequencedState(T owner) : base(owner) {}
+
+    public virtual void Enter(){}
+    public virtual void Exit(){}
+}
+
+public abstract class SequencedState2<T> : State<T>, IStateMachine<T>
+{
+    protected IState<T> _currentState;
+    public IState<T> CurrentState {
+        get {
+            return _currentState;
+        }
+        set {
+            _currentState?.Exit();
+
+            _currentState = value;
+            _currentState?.Enter();
+        }
+    }
+
+    public SequencedState2(IStateMachine<T> stateMachine) : base(stateMachine) {}
+
+}
+
+
 
 public class SuperState<T> : State<T>
 {
     public StateMachine<T> SubStateMachine;
-    public SuperState(StateMachine<T> stateMachine) : base(stateMachine)
+    public SuperState(IStateMachine<T> stateMachine) : base(stateMachine)
     {
         SubStateMachine = new StateMachine<T>(Owner);
     }
@@ -126,12 +161,3 @@ public class SubState<T, S> : State<T> where S : SuperState<T>
 }
 
 
-public abstract class SubState2<T> : StateMachine<T>, IState<T>
-{
-    protected StateMachine<T> StateMachine {get;}
-
-    public SubState2(T owner) : base(owner) {}
-
-    public virtual void Enter(){}
-    public virtual void Exit(){}
-}

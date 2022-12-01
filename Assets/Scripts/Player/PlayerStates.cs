@@ -4,7 +4,7 @@ namespace PlayerStates
 {
     public class Idle : State<Player>
     {
-        public Idle(StateMachine<Player> stateMachine) : base(stateMachine) {}
+        public Idle(IStateMachine<Player> stateMachine) : base(stateMachine) {}
 
         public override void Update()
         {
@@ -26,9 +26,9 @@ namespace PlayerStates
 
         //public float Angle {get; set;} = 0f;
 
-        StateMachine<JumpPhase> _subStateMachine;
+        IStateMachine<JumpPhase> _subStateMachine;
 
-        public JumpPhase(StateMachine<Player> stateMachine) : base(stateMachine) {}
+        public JumpPhase(IStateMachine<Player> stateMachine) : base(stateMachine) {}
 
         public override void Enter()
         {
