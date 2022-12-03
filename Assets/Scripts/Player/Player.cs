@@ -42,8 +42,8 @@ public class Player : MonoBehaviour
     public float Angle { get => _angle; set => _angle = value; }
 
     private void Awake() {
-        StateMachine = new StateMachine<Player>(this);
-        StateMachine.CurrentState = new PlayerStates.Idle(StateMachine);
+        StateMachine = new StateMachine<Player>();
+        StateMachine.CurrentState = new PlayerStates.Idle(this, StateMachine);
     }
     
     private void Update() {
@@ -53,10 +53,6 @@ public class Player : MonoBehaviour
         {
             transform.position = Vector3.zero;
         }
-    }
-
-    private void FixedUpdate() {
-        StateMachine.FixedUpdate();
     }
 
     public float getJumpDistance(float charge)

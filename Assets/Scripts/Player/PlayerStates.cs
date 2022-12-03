@@ -4,13 +4,13 @@ namespace PlayerStates
 {
     public class Idle : State<Player>
     {
-        public Idle(IStateMachine<Player> stateMachine) : base(stateMachine) {}
+        public Idle(Player owner, StateMachine<Player> stateMachine) : base(owner, stateMachine) {}
 
         public override void Update()
         {
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                StateMachine.CurrentState = new JumpPhase(StateMachine);
+                StateMachine.CurrentState = new JumpPhase(Owner, StateMachine);
             }
         }
 
@@ -28,19 +28,19 @@ namespace PlayerStates
 
         IStateMachine<JumpPhase> _subStateMachine;
 
-        public JumpPhase(IStateMachine<Player> stateMachine) : base(stateMachine) {}
+        public JumpPhase(Player owner, StateMachine<Player> stateMachine) : base(owner, stateMachine) {}
 
         public override void Enter()
         {
             base.Enter();
-            SubStateMachine.CurrentState = new ChargingTimed(this);
+            CurrentState = new ChargingTimed(Owner, this);
         }
     }
 
     public abstract class Charging : SubState<Player, JumpPhase>
     {
         
-        public Charging(JumpPhase superState) : base(superState) {}
+        public Charging(Player player, JumpPhase jumpPhase) : base(player, jumpPhase) {}
 
         public override void Enter()
         {
@@ -67,7 +67,7 @@ namespace PlayerStates
     {
         private float _startTime;
         
-        public ChargingTimed(JumpPhase superState) : base(superState) {}
+        public ChargingTimed(Player player, JumpPhase jumpPhase) : base(player, jumpPhase) {}
 
         public override void Enter()
         {
@@ -83,7 +83,7 @@ namespace PlayerStates
 
             if(Input.GetKeyUp(KeyCode.Space) || SuperState.Charge >= 1f)
             {
-                StateMachine.CurrentState = new Jumping(SuperState); 
+                StateMachine.CurrentState = new Jumping(Owner, SuperState); 
             }
         }
     }
@@ -95,7 +95,7 @@ namespace PlayerStates
         private float _duration;
         
 
-        public Jumping(JumpPhase superState) : base(superState)
+        public Jumping(Player player, JumpPhase superState) : base(player, superState)
         {
             _duration = Mathf.Lerp(Owner.MinJumpDuration, Owner.MaxJumpDuration, SuperState.Charge);
         }
@@ -128,7 +128,7 @@ namespace PlayerStates
             if(jumpTime >= 1f)
             {
                 EventManager.TriggerEvent("Land");
-                Owner.StateMachine.CurrentState = new Idle(Owner.StateMachine);
+                Owner.StateMachine.CurrentState = new Idle(Owner, Owner.StateMachine);
             }
                 
         }   
