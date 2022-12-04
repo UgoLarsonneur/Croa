@@ -31,19 +31,21 @@ public class Player : MonoBehaviour
     /*___Turning___*/
     [SerializeField] float turnSpeed;
     [SerializeField] float maxTurnAngle;
+    public float Angle {get; set;} = 0f;
     
-
     public float TurnSpeed => turnSpeed;
     public float MaxTurnAngle => maxTurnAngle;
 
+
+
+    /*___States___*/
     public StateMachine<Player> StateMachine {get; protected set;}
 
-    private float _angle = 0f;
-    public float Angle { get => _angle; set => _angle = value; }
+    
 
     private void Awake() {
-        StateMachine = new StateMachine<Player>();
-        StateMachine.CurrentState = new PlayerStates.Idle(this, StateMachine);
+        StateMachine = new StateMachine<Player>(this);
+        StateMachine.CurrentState = new PlayerStates.Idle(StateMachine);
     }
     
     private void Update() {

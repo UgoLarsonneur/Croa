@@ -15,13 +15,15 @@ public interface IState<T>
 
 public interface IStateMachine<T>
 {
-    public void Update();
+    public T Owner{get;}
     public IState<T> CurrentState{get; set;}
+    public void Update();
 }
 
 
 public class StateMachine<T> : IStateMachine<T>
 {
+    public virtual T Owner{get;}
     protected IState<T> _currentState;
     public IState<T> CurrentState {
         get {
@@ -39,17 +41,21 @@ public class StateMachine<T> : IStateMachine<T>
         CurrentState?.Update();
     }
 
+    public StateMachine(T owner)
+    {
+        Owner = owner;
+    }
+
 }
 
 
 public abstract class State<T> : IState<T>
 {
     public StateMachine<T> StateMachine {get;}
-    public T Owner{get;}
+    public T Owner => StateMachine.Owner;
 
-    public State(T owner, StateMachine<T> stateMachine)
+    public State(StateMachine<T> stateMachine)
     {
-        Owner = owner;
         StateMachine = stateMachine;
     }
 
@@ -62,12 +68,10 @@ public abstract class State<T> : IState<T>
 
 public abstract class SuperState<T> : StateMachine<T>, IState<T>
 {
-    public T Owner{get;}
     public StateMachine<T> StateMachine{get;}
 
-    public SuperState(T owner, StateMachine<T> stateMachine)
+    public SuperState(StateMachine<T> stateMachine) : base(stateMachine.Owner)
     {
-        Owner = owner;
         StateMachine = stateMachine;
     }
 
@@ -91,7 +95,7 @@ public abstract class SuperState<T> : StateMachine<T>, IState<T>
 public abstract class SubState<T, S> : State<T> where S : SuperState<T>
 {
     protected S SuperState => (S)StateMachine;
-    public SubState(T owner, S superState) : base(owner, superState) {}
+    public SubState(S superState) : base(superState) {}
 }
 
 /*public abstract class SuperState2<T> : State<T>, IStateMachine<T>
