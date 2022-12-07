@@ -2,6 +2,8 @@ using UnityEngine;
 
 namespace PlayerStates
 {
+
+
     public class Idle : State<Player>
     {
         public Idle(StateMachine<Player> stateMachine) : base(stateMachine) {}
@@ -12,13 +14,10 @@ namespace PlayerStates
             {
                 StateMachine.CurrentState = new JumpPhase(StateMachine);
             }
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
+            Owner.MoveAngle();
         }
     }
+
 
     public class JumpPhase : SuperState<Player>
     {
@@ -36,9 +35,10 @@ namespace PlayerStates
         }
     }
 
+
     public abstract class Charging : SubState<Player, JumpPhase>
     {
-        
+
         public Charging(JumpPhase jumpPhase) : base(jumpPhase) {}
 
         public override void Enter()
@@ -48,19 +48,10 @@ namespace PlayerStates
 
         public override void Update()
         {
-            float angleDelta = 0f;
-            if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow))
-            {
-                angleDelta += 1f;
-            }
-            if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.RightArrow))
-            {
-                angleDelta -= 1f;
-            }
-
-            /*SuperState*/Owner.Angle = Mathf.Clamp(/*SuperState*/Owner.Angle + angleDelta * Time.deltaTime * Owner.TurnSpeed, -Owner.MaxTurnAngle, Owner.MaxTurnAngle);
+            Owner.MoveAngle();
         }
     }
+
 
     public class ChargingTimed : Charging
     {
@@ -76,16 +67,16 @@ namespace PlayerStates
 
         public override void Update()
         {
-            base.Update();
-            
             SuperState.Charge = Mathf.Clamp01((Time.time - _startTime) / Owner.ChargeDuration);
-
             if(Input.GetKeyUp(KeyCode.Space) || SuperState.Charge >= 1f)
             {
                 StateMachine.CurrentState = new Jumping(SuperState); 
             }
+
+            base.Update();
         }
     }
+
 
     public class Jumping : SubState<Player, JumpPhase>
     {
@@ -103,23 +94,16 @@ namespace PlayerStates
         {
             _startTime = Time.time;
             _startPos = Owner.transform.position;
+            Owner.transform.parent = null;
 
             EventManager.TriggerEvent("Jump");
-
-            //set rotation
-            //init animation
-        }
-
-        public override void Exit()
-        {
-            //init animation
         }
 
         public override void Update()
         {
             float jumpTime = Mathf.Clamp01((Time.time - _startTime) / Mathf.Lerp(Owner.MinJumpDuration, Owner.MaxJumpDuration, SuperState.Charge));
 
-            Owner.transform.position = _startPos + Quaternion.AngleAxis(/*SuperState*/Owner.Angle, Vector3.up) * 
+            Owner.transform.position = _startPos + Quaternion.AngleAxis(Owner.Angle, Vector3.up) * 
                 new Vector3( 0f,
                 Owner.JumpShape.Evaluate(jumpTime) * Owner.ChargeMaxHeight.Evaluate(SuperState.Charge) * Owner.MaxJumpHeight,
                 Owner.getJumpDistance(SuperState.Charge) * jumpTime);
@@ -127,9 +111,45 @@ namespace PlayerStates
             if(jumpTime >= 1f)
             {
                 EventManager.TriggerEvent("Land");
+                Physics.Raycast(Owner.transform.position+Vector3.up*10f, Vector3.down, out RaycastHit hit, 10f, LayerMask.GetMask("Lily"));
+                if(hit.collider != null)
+                {
+                    Transform lilyModel = hit.collider.gameObject.transform;
+                    Owner.transform.parent = lilyModel;
+                    Owner.transform.localPosition = new Vector3(Owner.transform.localPosition.x, 0f, Owner.transform.localPosition.z);
+                    
+                }
+                else
+                {
+                    //Owner.transform.parent = null;
+                    Debug.Log("Perdu");
+                }
+
                 Owner.StateMachine.CurrentState = new Idle(Owner.StateMachine);
             }
                 
         }   
     }
+
+/*     public class Landing : State<Player>
+    {
+
+        public Landing(StateMachine<Player> stateMachine) : base(stateMachine) {}
+
+        public override void Enter()
+        {
+            
+            base.Enter();
+            //TODO: Clean
+
+
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            EventManager.TriggerEvent("Finished Landing");
+        }
+
+    } */
 }

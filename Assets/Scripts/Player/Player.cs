@@ -67,6 +67,21 @@ public class Player : MonoBehaviour
         return MinJumpDuration + (MaxJumpDuration - MinJumpDuration) * charge;
     }
 
+    public void MoveAngle()
+    {
+        float angleDelta = 0f;
+        if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            angleDelta += 1f;
+        }
+        if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.RightArrow))
+        {
+            angleDelta -= 1f;
+        }
+
+        Angle = Mathf.Clamp(Angle + angleDelta * Time.deltaTime * TurnSpeed, -MaxTurnAngle, MaxTurnAngle);
+    }
+
     private void OnGUI() {
         if(GameManager.Instance.DebugEnabled)
             GUILayout.Box("Player State: " + StateMachine.CurrentState.ToString());

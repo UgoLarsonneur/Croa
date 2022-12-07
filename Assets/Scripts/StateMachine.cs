@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public interface IState<T>
 {
     public T Owner{get;}
@@ -62,7 +63,6 @@ public abstract class State<T> : IState<T>
     public virtual void Enter(){}
     public virtual void Exit(){}
     public virtual void Update(){}
-
 }
 
 
@@ -87,43 +87,47 @@ public abstract class SuperState<T> : StateMachine<T>, IState<T>
 }
 
 
-/// <summary>
-/// 
-/// </summary>
-/// <typeparam name="T"></typeparam>
-/// <typeparam name="S"></typeparam>
 public abstract class SubState<T, S> : State<T> where S : SuperState<T>
 {
     protected S SuperState => (S)StateMachine;
     public SubState(S superState) : base(superState) {}
 }
 
-/*public abstract class SuperState2<T> : State<T>, IStateMachine<T>
+
+public class ComposedState<T> : State<T>
 {
-    public T Owner{get;}
-    public IStateMachine<T> StateMachine{get;}
+    protected List<IState<T>> states;
 
-    public SuperState2(IStateMachine<T> stateMachine, T owner)
+    public ComposedState(StateMachine<T> stateMachine) : base(stateMachine) {}
+
+    public void AddState(IState<T> state)
     {
-        Owner = owner;
-        StateMachine = stateMachine;
+        states.Add(state);
+        state.Enter();
     }
 
-    public virtual void Enter(){}
-    public virtual void Exit(){
-        CurrentState?.Exit();
-    }
-
-    public override string ToString()
+    public void RemoveState(IState<T> state)
     {
-        return this.GetType().Name+"/"+CurrentState.GetType().Name;
+        if(!states.Contains(state))
+            return;
+
+        state.Exit();
+        states.Remove(state);
     }
-}*/
 
+    public override void Update()
+    {
+        foreach (IState<T> state in states)
+        {
+            state.Update();
+        }
+    }
 
-
-
-
-
-
-
+    public override void Exit()
+    {
+        foreach (IState<T> state in states)
+        {
+            state.Exit();
+        }
+    }
+}

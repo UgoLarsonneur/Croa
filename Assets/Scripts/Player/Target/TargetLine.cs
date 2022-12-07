@@ -25,6 +25,7 @@ public class TargetLine : MonoBehaviour
     private void OnCharge()
     {
         UpdatePos();
+        _lineRenderer.material.mainTextureOffset = Vector2.zero;
         enabled = true;
         _lineRenderer.enabled = true;
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 
 /* public class JumpTarget : TargetUI
@@ -14,34 +15,34 @@ using UnityEngine;
         transform.position = player.transform.position + pos;
     }
 } */
-
+//TODO: Refactor avec des States
 public class JumpTarget : MonoBehaviour
 {
     [SerializeField] Player player;
 
+    private float _distance;
     private SpriteRenderer _renderer;
 
     private void Awake() {
         _renderer = GetComponent<SpriteRenderer>();
-        _renderer.enabled = false;
+        _distance  = player.getJumpDistance(0f);
     }
 
     private void Start() {
-        EventManager.StartListening("Charge", OnCharge);
+        EventManager.StartListening("Land", OnLand);
         EventManager.StartListening("Jump", OnJump);
-        enabled = false;
     }
 
-    private void OnCharge()
+    private void OnLand()
     {
+        _distance  = player.getJumpDistance(0f);
         UpdatePos();
-        enabled = true;
         _renderer.enabled = true;
+        //DOTween.To(() => _distance, x => _distance = x, player.getJumpDistance(0f), 0.1f);
     }
 
     private void OnJump()
     {
-        enabled = false;
         _renderer.enabled = false;
     }
 
@@ -51,10 +52,20 @@ public class JumpTarget : MonoBehaviour
 
     private void UpdatePos()
     {
+
+        IState<Player> playerState = player.StateMachine.CurrentState;
+        if(playerState is PlayerStates.JumpPhase)
+        {
+            PlayerStates.JumpPhase jumpPhase= (PlayerStates.JumpPhase)playerState;
+            if(jumpPhase.CurrentState is PlayerStates.Jumping)
+                return;
+            _distance = player.getJumpDistance(((PlayerStates.JumpPhase)playerState).Charge);
+        }
+
         transform.rotation = Quaternion.LookRotation(Vector3.up, player.transform.position - transform.position);
-        PlayerStates.JumpPhase jumpPhase = (PlayerStates.JumpPhase)player.StateMachine.CurrentState;
-        //Vector3 pos = Quaternion.AngleAxis(jumpPhase.Angle, Vector3.up) * Vector3.forward * player.getJumpDistance(jumpPhase.Charge) + Vector3.up * 0.05f;
-        Vector3 pos = Quaternion.AngleAxis(player.Angle, Vector3.up) * Vector3.forward * player.getJumpDistance(jumpPhase.Charge) + Vector3.up * 0.05f;
+        Vector3 pos = Quaternion.AngleAxis(player.Angle, Vector3.up) * Vector3.forward * _distance + Vector3.up * 0.05f;
         transform.position = player.transform.position + pos;
+
+
     }
 }
