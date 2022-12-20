@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18623f8c0e44ec14c991d9d09561e9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chargeDuration: 1.25
+  chargeDuration: 1.1
   minJumpDuration: 0.2
-  maxJumpDuration: 0.8
-  minJumpDist: 2
-  maxJumpDist: 10
+  maxJumpDuration: 0.7
+  minJumpDist: 2.5
+  maxJumpDist: 11
   maxJumpHeight: 3.5
   jumpShape:
     serializedVersion: 2
@@ -109,8 +109,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   timeToCharge: 0
-  turnSpeed: 100
-  maxTurnAngle: 65
+  turnSpeed: 120
+  maxTurnAngle: 80
 --- !u!1001 &7980640096140116005
 PrefabInstance:
   m_ObjectHideFlags: 0
