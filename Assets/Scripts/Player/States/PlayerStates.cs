@@ -111,45 +111,20 @@ namespace PlayerStates
             if(jumpTime >= 1f)
             {
                 EventManager.TriggerEvent("Land");
-                Physics.Raycast(Owner.transform.position+Vector3.up*10f, Vector3.down, out RaycastHit hit, 10f, LayerMask.GetMask("Lily"));
-                if(hit.collider != null)
+                if(Owner.TryLand())
                 {
-                    Transform lilyModel = hit.collider.gameObject.transform;
-                    Owner.transform.parent = lilyModel;
-                    Owner.transform.localPosition = new Vector3(Owner.transform.localPosition.x, 0f, Owner.transform.localPosition.z);
-                    
+                    Owner.StateMachine.CurrentState = new Idle(Owner.StateMachine);
                 }
                 else
                 {
-                    //Owner.transform.parent = null;
+                    //TODO: remplacer par lose state
                     Debug.Log("Perdu");
+                    Owner.StateMachine.CurrentState = new Idle(Owner.StateMachine);
                 }
 
-                Owner.StateMachine.CurrentState = new Idle(Owner.StateMachine);
+                
             }
                 
         }   
     }
-
-/*     public class Landing : State<Player>
-    {
-
-        public Landing(StateMachine<Player> stateMachine) : base(stateMachine) {}
-
-        public override void Enter()
-        {
-            
-            base.Enter();
-            //TODO: Clean
-
-
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
-            EventManager.TriggerEvent("Finished Landing");
-        }
-
-    } */
 }

@@ -18,7 +18,8 @@ public class FollowTarget : MonoBehaviour
             transform.position.z,
             target.position.z + _offset,
             ref _currentVelocity,
-            smoothTime);
+            smoothTime,
+            Mathf.Infinity);
         transform.position = new Vector3(transform.position.x, transform.position.y, newZ);
     }
 }

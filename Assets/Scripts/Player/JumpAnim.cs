@@ -10,7 +10,7 @@ public class JumpAnim : StateMachineBehaviour
         Player player = GameManager.Player;
         float charge = ((PlayerStates.JumpPhase)player.StateMachine.CurrentState).Charge;
 
-        float targetLength = player.getJumpLength(charge);
+        float targetLength = player.getJumpDuration(charge);
         animator.speed = stateInfo.length / targetLength ;
     }
 

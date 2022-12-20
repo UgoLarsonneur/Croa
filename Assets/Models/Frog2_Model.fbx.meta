@@ -7,6 +7,16 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: frogBodyMat
+    second: {fileID: 2100000, guid: dc528768f7febd94baa93bf4119e44c4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: frogEyesMat
+    second: {fileID: 2100000, guid: 9c48509f29ffe934bb27e58d24dfe164, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: lambert1
     second: {fileID: 2100000, guid: 129297976c23a0b49a15be7ed285525c, type: 2}
   - first:
@@ -16,7 +26,7 @@ ModelImporter:
     second: {fileID: 2100000, guid: 129297976c23a0b49a15be7ed285525c, type: 2}
   materials:
     materialImportMode: 2
-    materialName: 0
+    materialName: 1
     materialSearch: 1
     materialLocation: 1
   animations:
@@ -47,7 +57,7 @@ ModelImporter:
       takeName: Scene
       internalID: -623603649343465320
       firstFrame: 0
-      lastFrame: 4
+      lastFrame: 5
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

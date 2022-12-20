@@ -41,11 +41,14 @@ public class Player : MonoBehaviour
     /*___States___*/
     public StateMachine<Player> StateMachine {get; protected set;}
 
-    
 
     private void Awake() {
         StateMachine = new StateMachine<Player>(this);
         StateMachine.CurrentState = new PlayerStates.Idle(StateMachine);
+    }
+
+    private void Start() {
+        TryLand();
     }
     
     private void Update() {
@@ -62,7 +65,7 @@ public class Player : MonoBehaviour
         return MinJumpDist + (MaxJumpDist - MinJumpDist) * charge;
     }
 
-    public float getJumpLength(float charge)
+    public float getJumpDuration(float charge)
     {
         return MinJumpDuration + (MaxJumpDuration - MinJumpDuration) * charge;
     }
@@ -85,6 +88,19 @@ public class Player : MonoBehaviour
     private void OnGUI() {
         if(GameManager.Instance.DebugEnabled)
             GUILayout.Box("Player State: " + StateMachine.CurrentState.ToString());
+    }
+
+    public bool TryLand()
+    {
+        Physics.Raycast(transform.position+Vector3.up*10f, Vector3.down, out RaycastHit hit, 10f, LayerMask.GetMask("Lily"));
+        if(hit.collider != null)
+        {
+            Transform lilyModel = hit.collider.gameObject.transform;
+            transform.parent = lilyModel;
+            transform.localPosition = new Vector3(transform.localPosition.x, 0f, transform.localPosition.z);
+            return true;
+        }
+        return false;
     }
     
 }
