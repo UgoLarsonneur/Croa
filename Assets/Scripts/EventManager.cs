@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventManager : MonoBehaviour
+public class EventManager : MonoBehaviour //TODO: utiliser singleton<eventmanager>
 {
     private static EventManager _instance;
 
