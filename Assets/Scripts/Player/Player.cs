@@ -99,14 +99,4 @@ public class Player : MonoBehaviour
         }
         return false;
     }
-
-
-    private void OnGUI() {
-        if(GameManager.Instance.DebugEnabled)
-        {
-            GUILayout.Box("Player State: " + StateMachine.CurrentState.ToString());
-            GUILayout.Space(10);
-        }
-    }
-    
 }

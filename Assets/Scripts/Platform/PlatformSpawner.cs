@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlatformSpawner : Platform
+public class PlatformSpawner : MonoBehaviour
 {
     [SerializeField] PlatformData platformData;
     [SerializeField] GameObject initialPlatform;
@@ -24,12 +24,22 @@ public class PlatformSpawner : Platform
     
     [Space]
     [SerializeField] AnimationCurve unsafePlatformChanceBySpawnedCount;
-    [SerializeField] AnimationCurve nonCtriticalPlatformChanceBySpawnedCount;
+    public float UnsafePlatformChance {
+        get {
+            return unsafePlatformChanceBySpawnedCount.Evaluate(SpawnedCount);
+        }
+    }
+    [SerializeField] AnimationCurve NonCtriticalPlatformChanceBySpawnedCount;
+    public float NonCtriticalPlatformChance {
+        get {
+            return unsafePlatformChanceBySpawnedCount.Evaluate(SpawnedCount);
+        }
+    }
     //[SerializeField] float unsafePlatformChanceIncrease; //for each consecutive safe platform spawned, increases the chance to spawn an unsafe one
 
     private List<Platform> platforms;
     Platform _lastCriticalPlatform;
-    private int spawnedCount;
+    public int SpawnedCount {get; private set;}
     private int lastUnsafePlatform = 0;
     float spawnSpeedMultiplier = 1f;
 
@@ -40,7 +50,7 @@ public class PlatformSpawner : Platform
         platforms = new List<Platform>();
         _lastCriticalPlatform = initialPlatform.GetComponent<Platform>();
         platforms.Add(_lastCriticalPlatform);
-        spawnedCount = 1;
+        SpawnedCount = 1;
     }
 
 
@@ -50,10 +60,8 @@ public class PlatformSpawner : Platform
 
     public void CheckForRapidMode()
     {   
-        
         if(GetRemainingPlatformCount() <= rapidSpawnThreshold)
         {
-            StopCoroutine("ActivateRapidSpawn");
             StartCoroutine(ActivateRapidSpawn());
         }
     }
@@ -82,7 +90,6 @@ public class PlatformSpawner : Platform
                 yield return null;
                 continue;
             }
-            Debug.Log(GetRemainingPlatformCount());
             
             _lastCycleSpawnTime = Time.time;
 
@@ -92,7 +99,7 @@ public class PlatformSpawner : Platform
             // TODO: meilleur façon de spawn (sans coroutines imbriquées)?
             
             StartCoroutine(SpawnCritical(Random.Range(0f, cycleDuration)));
-            if(Random.Range(0f, 1f) < nonCtriticalPlatformChanceBySpawnedCount.Evaluate(spawnedCount))
+            if(Random.Range(0f, 1f) < NonCtriticalPlatformChance)
                 StartCoroutine(SpawnNonCritical(_lastCriticalPlatform.transform.position, Random.Range(0f, cycleDuration)));
 
             yield return null;
@@ -121,10 +128,10 @@ public class PlatformSpawner : Platform
         Vector3 spawnPos = FindPos(_lastCriticalPlatform.transform.position, true);
 
         GameObject platformToSpawn;
-        if(Random.Range(0f, 1f) < unsafePlatformChanceBySpawnedCount.Evaluate(spawnedCount))
+        if(Random.Range(0f, 1f) < UnsafePlatformChance)
         {
             platformToSpawn = platformData.chooseUnsafePlatform();
-            lastUnsafePlatform = spawnedCount;
+            lastUnsafePlatform = SpawnedCount;
         }
         else
             platformToSpawn = platformData.chooseSafePlatform();
@@ -138,8 +145,8 @@ public class PlatformSpawner : Platform
     Platform Spawn(Vector3 spawnPos, GameObject platformToSpawn)
     {
         Platform spawnedInstance = Instantiate(platformToSpawn, spawnPos, Quaternion.identity).GetComponent<Platform>();
-        spawnedInstance.Number = spawnedCount;
-        ++spawnedCount;
+        spawnedInstance.Number = SpawnedCount;
+        ++SpawnedCount;
         platforms.Add(spawnedInstance);
         return spawnedInstance;
     }
@@ -193,26 +200,12 @@ public class PlatformSpawner : Platform
 
     private int GetRemainingPlatformCount()
     {
-        return (spawnedCount-1) - GameManager.LastPlatformReached;
+        return (SpawnedCount-1) - GameManager.LastPlatformReached;
     }
 
 
     public void RemovePlatform(Platform p)
     {
         platforms.Remove(p);
-    }
-
-
-    private void OnGUI() {
-        if(GameManager.Instance.DebugEnabled)
-        {
-            GUILayout.Box("Platform spawn count: " + spawnedCount);
-            GUILayout.Box("Last platform reached: " + GameManager.LastPlatformReached);
-            GUILayout.Box("Current non critical platform spawn chance: " + nonCtriticalPlatformChanceBySpawnedCount.Evaluate(spawnedCount));
-            GUILayout.Box("Current unsafe platform spawn chance: " + unsafePlatformChanceBySpawnedCount.Evaluate(spawnedCount));
-            GUILayout.Space(1);
-
-        }
-            
     }
 }

@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 1806552274920874041, guid: 8f8de9ffaa90ada468cd824023c179ae,
         type: 3}
       propertyPath: m_Name
-      value: LilyBad
+      value: LilyBad Variant
       objectReference: {fileID: 0}
     - target: {fileID: 3969843119487613714, guid: 8f8de9ffaa90ada468cd824023c179ae,
         type: 3}

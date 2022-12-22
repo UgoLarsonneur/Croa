@@ -6,66 +6,75 @@ using DG.Tweening;
 
 /* public class JumpTarget : TargetUI
 {
-    [SerializeField] protected Player player;
+    [SerializeField] protected Player GameManager.Player;
 
     protected override void OnShow()
     {
-        PlayerStates.PlayerCharge jumpPhase = (PlayerStates.PlayerCharge)player.SM.CurrentState;
-        Vector3 pos = Quaternion.AngleAxis(jumpPhase.Angle, Vector3.up) * Vector3.forward * player.getJumpDistance(jumpPhase.Charge) + Vector3.up * 0.05f;
-        transform.position = player.transform.position + pos;
+        PlayerStates.PlayerCharge jumpPhase = (PlayerStates.PlayerCharge)GameManager.Player.SM.CurrentState;
+        Vector3 pos = Quaternion.AngleAxis(jumpPhase.Angle, Vector3.up) * Vector3.forward * GameManager.Player.getJumpDistance(jumpPhase.Charge) + Vector3.up * 0.05f;
+        currentChargeTarget.position = GameManager.Player.currentChargeTarget.position + pos;
     }
 } */
 //TODO: Refactor avec des States
 public class JumpTarget : MonoBehaviour
 {
-    [SerializeField] Player player;
+    [SerializeField] Transform currentChargeTarget;
+    [SerializeField] Transform maxTarget;
 
-    private float _distance;
-    private SpriteRenderer _renderer;
+    private SpriteRenderer _currentTargetRenderer;
+    private SpriteRenderer _maxTargetRenderer;
 
     private void Awake() {
-        _renderer = GetComponent<SpriteRenderer>();
-        _distance  = player.getJumpDistance(0f);
+        _currentTargetRenderer = currentChargeTarget.GetComponent<SpriteRenderer>();
+        _maxTargetRenderer = maxTarget.GetComponent<SpriteRenderer>();
+        _maxTargetRenderer.enabled = false;
     }
 
     private void Start() {
         EventManager.StartListening("Land", OnLand);
+        EventManager.StartListening("Charge", OnCharge);
         EventManager.StartListening("Jump", OnJump);
+
+        maxTarget.transform.localPosition = Vector3.forward * GameManager.Player.getJumpDistance(1f);
     }
 
     private void OnLand()
     {
-        _distance  = player.getJumpDistance(0f);
-        UpdatePos();
-        _renderer.enabled = true;
-        //DOTween.To(() => _distance, x => _distance = x, player.getJumpDistance(0f), 0.1f);
+        UpdateCurrentChargeTargetPos(0f);
+        _currentTargetRenderer.enabled = true;
+    }
+
+    private void OnCharge()
+    {
+        _maxTargetRenderer.enabled = true;
     }
 
     private void OnJump()
     {
-        _renderer.enabled = false;
+        _currentTargetRenderer.enabled = false;
+        _maxTargetRenderer.enabled = false;
     }
 
     private void Update() {
-        UpdatePos();
+
+        transform.rotation = Quaternion.AngleAxis(GameManager.Player.Angle, Vector3.up);
+        
+        IState<Player> playerState = GameManager.Player.StateMachine.CurrentState;
+        if(!(playerState is PlayerStates.JumpPhase))
+            return;
+
+        PlayerStates.JumpPhase jumpPhase = (PlayerStates.JumpPhase)playerState;
+        UpdateCurrentChargeTargetPos(jumpPhase.Charge);
     }
 
-    private void UpdatePos()
+    private void UpdateCurrentChargeTargetPos(float charge)
     {
+        currentChargeTarget.localPosition = Vector3.forward * GameManager.Player.getJumpDistance(charge);
+    }
 
-        IState<Player> playerState = player.StateMachine.CurrentState;
-        if(playerState is PlayerStates.JumpPhase)
-        {
-            PlayerStates.JumpPhase jumpPhase= (PlayerStates.JumpPhase)playerState;
-            if(jumpPhase.CurrentState is PlayerStates.Jumping)
-                return;
-            _distance = player.getJumpDistance(((PlayerStates.JumpPhase)playerState).Charge);
-        }
-
-        transform.rotation = Quaternion.LookRotation(Vector3.up, player.transform.position - transform.position);
-        Vector3 pos = Quaternion.AngleAxis(player.Angle, Vector3.up) * Vector3.forward * _distance + Vector3.up * 0.05f;
-        transform.position = player.transform.position + pos;
-
-
+    private void OnDestroy() {
+        EventManager.StopListening("Land", OnLand);
+        EventManager.StopListening("Charge", OnCharge);
+        EventManager.StopListening("Jump", OnJump);
     }
 }

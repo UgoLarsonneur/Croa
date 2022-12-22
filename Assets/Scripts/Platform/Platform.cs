@@ -12,32 +12,45 @@ public class Platform : MonoBehaviour
         OnAwake();
     }
 
-
-    virtual public void OnLandedOn()
-    {
-        GameManager.LastPlatformReached = Mathf.Max(Number, GameManager.LastPlatformReached);
-        GameManager.Spawner.CheckForRapidMode();
-        
+    private void Update() {
+        OnUpdate();
     }
 
-
-    virtual protected void OnAwake()
-    {
-        EventManager.StartListening("Land", CheckIfBehindCamera);
-    }
-
-
-    private void OnDestroy() {
-        EventManager.StopListening("Land", CheckIfBehindCamera);
-        GameManager.Spawner.RemovePlatform(this);
-    }
-
-
-    void CheckIfBehindCamera()
+    virtual protected void OnUpdate()
     {
         if(transform.position.z < Camera.main.transform.position.z - 1f)
         {
             Destroy(gameObject);
         }
     }
+
+
+    virtual public void OnLandedOn()
+    {
+        GameManager.LastPlatformReached = Mathf.Max(Number, GameManager.LastPlatformReached);
+        GameManager.Spawner.CheckForRapidMode();
+    }
+
+
+    virtual protected void OnAwake()
+    {
+        //EventManager.StartListening("Land", CheckIfBehindCamera);
+    }
+
+
+    private void OnDestroy() {
+        if(GameManager.Quitting)
+            return;
+        //EventManager.StopListening("Land", CheckIfBehindCamera);
+        GameManager.Spawner.RemovePlatform(this);
+    }
+
+
+    // void CheckIfBehindCamera()
+    // {
+    //     if(transform.position.z < Camera.main.transform.position.z - 1f)
+    //     {
+    //         Destroy(gameObject);
+    //     }
+    // }
 }

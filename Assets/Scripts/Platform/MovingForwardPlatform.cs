@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class MovingForwardPlatform : Platform
 {
-    [SerializeField] float minMoveSpeed;
-    [SerializeField] float maxMoveSpeed;
+    [SerializeField] float moveSpeed;
 
-    float _moveSpeed;
 
-    private void Awake() {
-        _moveSpeed = Random.Range(minMoveSpeed, maxMoveSpeed);
+    protected override void OnAwake() {
+        base.OnAwake();
         transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
     }
 
-    void Update()
+
+    protected override void OnUpdate()
     {
-        transform.position -= Vector3.forward * _moveSpeed * Time.deltaTime;
+        base.OnUpdate();
+        transform.position -= Vector3.forward * moveSpeed * Time.deltaTime * GameManager.GlobalSpeed;
     }
 }
