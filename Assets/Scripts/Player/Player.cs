@@ -85,22 +85,28 @@ public class Player : MonoBehaviour
         Angle = Mathf.Clamp(Angle + angleDelta * Time.deltaTime * TurnSpeed, -MaxTurnAngle, MaxTurnAngle);
     }
 
-    private void OnGUI() {
-        if(GameManager.Instance.DebugEnabled)
-            GUILayout.Box("Player State: " + StateMachine.CurrentState.ToString());
-    }
 
     public bool TryLand()
     {
-        Physics.Raycast(transform.position+Vector3.up*10f, Vector3.down, out RaycastHit hit, 10f, LayerMask.GetMask("Lily"));
+        Physics.Raycast(transform.position+Vector3.up*10f, Vector3.down, out RaycastHit hit, 10f, LayerMask.GetMask("Platform"));
         if(hit.collider != null)
         {
-            Transform lilyModel = hit.collider.gameObject.transform;
-            transform.parent = lilyModel;
+            Platform platform = hit.collider.gameObject.GetComponent<Platform>();
+            platform.OnLandedOn();
+            transform.parent = platform.transform; //TODO: remplacer le parent par la mesh de la plateforme
             transform.localPosition = new Vector3(transform.localPosition.x, 0f, transform.localPosition.z);
             return true;
         }
         return false;
+    }
+
+
+    private void OnGUI() {
+        if(GameManager.Instance.DebugEnabled)
+        {
+            GUILayout.Box("Player State: " + StateMachine.CurrentState.ToString());
+            GUILayout.Space(10);
+        }
     }
     
 }

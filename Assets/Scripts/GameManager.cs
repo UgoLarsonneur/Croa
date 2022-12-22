@@ -28,6 +28,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Player player;
     public static Player Player => Instance.player;
 
+    [SerializeField] private PlatformSpawner spawner;
+    public static PlatformSpawner Spawner => Instance.spawner;
+
+    [SerializeField] AnimationCurve globalSpeedByPlatformReached;
+    public static float GlobalSpeed {
+        get {
+            return Instance.globalSpeedByPlatformReached.Evaluate(LastPlatformReached);
+        }
+    }
+
+    public static int LastPlatformReached {get; set;} = 0;
+
     private void Awake() {
         if(Instance != null && Instance != this)
         {

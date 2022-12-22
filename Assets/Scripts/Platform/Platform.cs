@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
-    public int Number {get; private set;} //first platform is platform 0, next is 1, next is 2,...
+    
+    public int Number{get; set;} //first platform is platform 0, next is 1, next is 2,...
 
 
     private void Awake() {
@@ -12,8 +13,31 @@ public class Platform : MonoBehaviour
     }
 
 
+    virtual public void OnLandedOn()
+    {
+        GameManager.LastPlatformReached = Mathf.Max(Number, GameManager.LastPlatformReached);
+        GameManager.Spawner.CheckForRapidMode();
+        
+    }
+
+
     virtual protected void OnAwake()
     {
-        Number = PlatformSpawner.lastPlatformNumber++;
+        EventManager.StartListening("Land", CheckIfBehindCamera);
+    }
+
+
+    private void OnDestroy() {
+        EventManager.StopListening("Land", CheckIfBehindCamera);
+        GameManager.Spawner.RemovePlatform(this);
+    }
+
+
+    void CheckIfBehindCamera()
+    {
+        if(transform.position.z < Camera.main.transform.position.z - 1f)
+        {
+            Destroy(gameObject);
+        }
     }
 }
