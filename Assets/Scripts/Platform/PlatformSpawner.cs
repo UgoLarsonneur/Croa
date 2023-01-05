@@ -9,9 +9,12 @@ public class PlatformSpawner : MonoBehaviour
 
     [Space]
     [SerializeField] float spawnDelay;
-    [SerializeField] int rapidSpawnThreshold; //if the difference of the last platform reached and the last platform spawned is below this threshold, start spawning rapidly
-    [SerializeField] int normalSpawnThreshold; //if the difference of the last platform reached and the last platform spawned is above this threshold, resume normal spawn speed
-    [SerializeField] int stopSpawnThreshold;
+
+    // Ces valeurs sont relative aux distances de sauts: 0 correspond à la distance de saut minimale, et 1 la distance de saut maximale
+    [SerializeField] int rapidSpawnThreshold; //if the distance between the last critical platform and the player is below this treshold, activate rapid spawn mode
+    [SerializeField] int normalSpawnThreshold; //if the distance between the last critical platform and the player is above this treshold, resume normal spawn speed
+    [SerializeField] int stopSpawnThreshold; //if the distance between the last critical platform and the player is above this treshold, stop spawning
+    
     [SerializeField] float spawnAreaWidth;
     [SerializeField] float maxSpawnAngle;
 
@@ -55,12 +58,14 @@ public class PlatformSpawner : MonoBehaviour
 
 
     private void Start() {
+        EventManager.StartListening("Land", CheckForRapidMode);
         StartCoroutine(SpawnCouroutine());
     }
 
     public void CheckForRapidMode()
-    {   
-        if(GetRemainingPlatformCount() <= rapidSpawnThreshold)
+    {
+        //if(GetRemainingPlatformCount() <= rapidSpawnThreshold)
+        if(GetPlayerDistanceFromLastCritical() < GameManager.Player.getJumpDistance(rapidSpawnThreshold))
         {
             StartCoroutine(ActivateRapidSpawn());
         }
@@ -70,7 +75,8 @@ public class PlatformSpawner : MonoBehaviour
     {
         spawnSpeedMultiplier = 5f;
 
-        while(GetRemainingPlatformCount() <= normalSpawnThreshold)
+        //while(GetRemainingPlatformCount() <= normalSpawnThreshold)
+        while(GetPlayerDistanceFromLastCritical() < normalSpawnThreshold)
         {
             yield return null;
         }
@@ -85,7 +91,9 @@ public class PlatformSpawner : MonoBehaviour
         while(enabled)
         {
             float cycleDuration = spawnDelay / spawnSpeedMultiplier;
-            if(Time.time - _lastCycleSpawnTime < cycleDuration || GetRemainingPlatformCount() >= stopSpawnThreshold)
+            if(Time.time - _lastCycleSpawnTime < cycleDuration 
+                //|| GetRemainingPlatformCount() >= stopSpawnThreshold)
+                || GetPlayerDistanceFromLastCritical() > stopSpawnThreshold)
             {
                 yield return null;
                 continue;
@@ -194,7 +202,6 @@ public class PlatformSpawner : MonoBehaviour
                 return false;
             }   
         }
-
         return true;
     }
 
@@ -203,6 +210,10 @@ public class PlatformSpawner : MonoBehaviour
         return (SpawnedCount-1) - GameManager.LastPlatformReached;
     }
 
+    private float GetPlayerDistanceFromLastCritical()
+    {
+        return (_lastCriticalPlatform.transform.position.z - GameManager.Player.transform.position.z);
+    }
 
     public void RemovePlatform(Platform p)
     {

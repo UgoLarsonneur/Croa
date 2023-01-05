@@ -27,8 +27,7 @@ public class Platform : MonoBehaviour
 
     virtual public void OnLandedOn()
     {
-        GameManager.LastPlatformReached = Mathf.Max(Number, GameManager.LastPlatformReached);
-        GameManager.Spawner.CheckForRapidMode();
+        GameManager.UpdatePlatformCounts(Number);
     }
 
 

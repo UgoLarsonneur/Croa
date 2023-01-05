@@ -23,26 +23,33 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public static int LastPlatformReached {get; set;} = 0;
+    public static int LastPlatformReached {get; private set;} = 0;
+    public static int NumberOfPlatformReached {get; private set;} = 0;
 
-    public bool DebugEnabled {get; private set;} = false;
+    public bool DebugMenuEnabled {get; private set;} = false;
 
     private void Update() {
         if(Input.GetKeyDown(KeyCode.T))
         {
-            DebugEnabled = !DebugEnabled;
+            DebugMenuEnabled = !DebugMenuEnabled;
         }
     }
 
+    public static void UpdatePlatformCounts(int platformNumber)
+    {
+        LastPlatformReached = Mathf.Max(platformNumber, LastPlatformReached);
+        ++NumberOfPlatformReached;
+    }
+
     private void OnGUI() {
-        if(!DebugEnabled)
+        if(!DebugMenuEnabled)
             return;
 
         GUILayout.Box("Player State: " + Player.StateMachine.CurrentState.ToString());
-
         GUILayout.Box("Global speed:"+ GlobalSpeed);
         GUILayout.Box("Platform spawn count: " + Spawner.SpawnedCount);
-        GUILayout.Box("Last platform reached: " + GameManager.LastPlatformReached);
+        GUILayout.Box("Number of platform reached: " + NumberOfPlatformReached);
+        GUILayout.Box("Last platform reached: " + LastPlatformReached);
         GUILayout.Box("Current non critical platform spawn chance: " + Spawner.NonCtriticalPlatformChance);
         GUILayout.Box("Current unsafe platform spawn chance: " + Spawner.UnsafePlatformChance);
     }
