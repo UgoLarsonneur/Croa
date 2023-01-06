@@ -5,6 +5,7 @@ using UnityEngine;
 public class Platform : MonoBehaviour
 {
     [SerializeField] protected Animator animator;
+    protected Collider _collider;
 
     public int Number{get; set;} //first platform is platform 0, next is 1, next is 2,...
 
@@ -12,6 +13,7 @@ public class Platform : MonoBehaviour
 
     private void Awake() {
         OnAwake();
+        _collider = GetComponent<Collider>();
     }
 
     private void Start() {
@@ -50,6 +52,11 @@ public class Platform : MonoBehaviour
 
     protected void OnSink()
     {
+        _collider.enabled = false;
+
+        if(isHostingPlayer)
+            GameManager.Player.StateMachine.CurrentState = new PlayerStates.Drowning(GameManager.Player.StateMachine);
+
         GameManager.Spawner.RemovePlatform(this);
         animator.SetTrigger("Sink");
     }

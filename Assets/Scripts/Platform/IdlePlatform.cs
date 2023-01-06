@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class IdlePlatform : Platform
 {
-    
 
     private void OnTriggerEnter(Collider other) {
+        
         if(other.gameObject.layer == LayerMask.NameToLayer("Platform"))
         {
-            animator.SetTrigger("Sink");
+            OnSink();
         }
     }
-
-
     
 }

@@ -18,4 +18,12 @@ public class MovingForwardPlatform : Platform
         base.OnUpdate();
         transform.position -= Vector3.forward * moveSpeed * Time.deltaTime * GameManager.GlobalSpeed;
     }
+
+    private void OnTriggerEnter(Collider other) {
+        
+        if(other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        {
+            OnSink();
+        }
+    }
 }

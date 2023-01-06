@@ -33,7 +33,6 @@ public class PlayerAnimHandler : MonoBehaviour
     void LaunchJumpAnim()
     {
         _animator.SetTrigger(_jumpTriggerHash);
-        Debug.Log(GameManager.Player.Angle);
         transform.DORotate(new Vector3(0f, GameManager.Player.Angle, 0f), turnLength).SetEase(Ease.OutQuint);
     
     }
