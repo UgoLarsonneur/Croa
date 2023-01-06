@@ -81,6 +81,10 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _Blend: 0
+    - _BlendOp: 0
+    - _Brutalite: 1.1
+    - _BrutaliteAlpha: 0.5
+    - _BrutaliteTroughColor: 0.45
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -95,30 +99,41 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
+    - _OpaqueDepth: 1
+    - _OpaqueDist: 0
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _RippleDensity: 4.81
-    - _RippleSlimness: 3
-    - _RippleSpeed: 1
+    - _RippleDensity: 1.53
+    - _RippleSlimness: 4
+    - _RippleSpeed: 0.8
+    - _SampleGI: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
+    - _TransitionLength: 2
+    - _TransitionLengthAlpha: 0.3
+    - _TransitionStartDist: 1
+    - _TransitionlengthTroughColor: 2
     - _WaveSpeed: 0.1
     - _WorkflowMode: 1
     - _ZWrite: 1
+    - _minAlpha: 0.5
+    - _minalpha: 0.4
+    - _throughColorStrength: 1.42
     - _tiling: 0.1
-    - _waveHeight: 0.2
+    - _waveHeight: 0.3
     - _waveScale: 5
     m_Colors:
-    - _BaseColor: {r: 0, g: 0.5733936, b: 1, a: 1}
-    - _Color: {r: 0.24999997, g: 0.75969267, b: 1, a: 1}
+    - _BaseColor: {r: 0, g: 0.19044797, b: 0.4811321, a: 1}
+    - _Color: {r: 0, g: 0.53904265, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RippleColor: {r: 0, g: 0.5768429, b: 3.060472, a: 0}
+    - _RippleColor: {r: 0.0022249965, g: 0.10892344, b: 0.4716981, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _seeTroughColor: {r: 0, g: 0.5041969, b: 0.6415094, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &6388967501941892413
 MonoBehaviour:

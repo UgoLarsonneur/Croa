@@ -32,13 +32,12 @@ public class PlatformSpawner : MonoBehaviour
             return unsafePlatformChanceBySpawnedCount.Evaluate(SpawnedCount);
         }
     }
-    [SerializeField] AnimationCurve NonCtriticalPlatformChanceBySpawnedCount;
+    [SerializeField] AnimationCurve nonCtriticalPlatformChanceBySpawnedCount;
     public float NonCtriticalPlatformChance {
         get {
-            return unsafePlatformChanceBySpawnedCount.Evaluate(SpawnedCount);
+            return nonCtriticalPlatformChanceBySpawnedCount.Evaluate(SpawnedCount);
         }
     }
-    //[SerializeField] float unsafePlatformChanceIncrease; //for each consecutive safe platform spawned, increases the chance to spawn an unsafe one
 
     private List<Platform> platforms;
     Platform _lastCriticalPlatform;
@@ -101,10 +100,7 @@ public class PlatformSpawner : MonoBehaviour
             
             _lastCycleSpawnTime = Time.time;
 
-            // Each cycle, spawn a critical platform and a non critical one at random times inside the cycle
-            // Mieux que de faire spawner une critique et une non critique tour à tour,
-            // car là le joueur pourrait finir par remarquer qu'une plateforme sur deux est forcément safe
-            // TODO: meilleur façon de spawn (sans coroutines imbriquées)?
+            // Each cycle, spawn a critical and a non critical platform at random times inside the cycle
             
             StartCoroutine(SpawnCritical(Random.Range(0f, cycleDuration)));
             if(Random.Range(0f, 1f) < NonCtriticalPlatformChance)
@@ -212,7 +208,7 @@ public class PlatformSpawner : MonoBehaviour
 
     private float GetPlayerDistanceFromLastCritical()
     {
-        return (_lastCriticalPlatform.transform.position.z - GameManager.Player.transform.position.z);
+        return (_lastCriticalPlatform.transform.position.z - GameManager.Player.transform.position.z) / GameManager.Player.getJumpDistance(1f);
     }
 
     public void RemovePlatform(Platform p)

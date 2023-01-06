@@ -14,7 +14,18 @@ namespace PlayerStates
             {
                 StateMachine.CurrentState = new JumpPhase(StateMachine);
             }
-            Owner.MoveAngle();
+            
+            float angleDelta = 0f;
+            if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                angleDelta += 1f;
+            }
+            if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.RightArrow))
+            {
+                angleDelta -= 1f;
+            }
+
+            Owner.Angle = Mathf.Clamp(Owner.Angle + angleDelta * Time.deltaTime * Owner.TurnSpeed, -Owner.MaxTurnAngle, Owner.MaxTurnAngle);
         }
     }
 
@@ -48,7 +59,7 @@ namespace PlayerStates
 
         public override void Update()
         {
-            Owner.MoveAngle();
+            //Owner.MoveAngle();
         }
     }
 
