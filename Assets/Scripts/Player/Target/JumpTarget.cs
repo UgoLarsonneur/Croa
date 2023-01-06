@@ -4,18 +4,6 @@ using UnityEngine;
 using DG.Tweening;
 
 
-/* public class JumpTarget : TargetUI
-{
-    [SerializeField] protected Player GameManager.Player;
-
-    protected override void OnShow()
-    {
-        PlayerStates.PlayerCharge jumpPhase = (PlayerStates.PlayerCharge)GameManager.Player.SM.CurrentState;
-        Vector3 pos = Quaternion.AngleAxis(jumpPhase.Angle, Vector3.up) * Vector3.forward * GameManager.Player.getJumpDistance(jumpPhase.Charge) + Vector3.up * 0.05f;
-        currentChargeTarget.position = GameManager.Player.currentChargeTarget.position + pos;
-    }
-} */
-//TODO: Refactor avec des States
 public class JumpTarget : MonoBehaviour
 {
     [SerializeField] Transform currentChargeTarget;
@@ -33,9 +21,11 @@ public class JumpTarget : MonoBehaviour
     private void Start() {
         EventManager.StartListening("Land", OnLand);
         EventManager.StartListening("Charge", OnCharge);
-        EventManager.StartListening("Jump", OnJump);
+        EventManager.StartListening("Jump", Hide);
+        EventManager.StopListening("Drown", Hide);
 
         maxTarget.transform.localPosition = Vector3.forward * GameManager.Player.getJumpDistance(1f);
+        UpdateCurrentChargeTargetPos(0f);
     }
 
     private void OnLand()
@@ -49,7 +39,7 @@ public class JumpTarget : MonoBehaviour
         _maxTargetRenderer.enabled = true;
     }
 
-    private void OnJump()
+    private void Hide()
     {
         _currentTargetRenderer.enabled = false;
         _maxTargetRenderer.enabled = false;
@@ -75,6 +65,7 @@ public class JumpTarget : MonoBehaviour
     private void OnDestroy() {
         EventManager.StopListening("Land", OnLand);
         EventManager.StopListening("Charge", OnCharge);
-        EventManager.StopListening("Jump", OnJump);
+        EventManager.StopListening("Jump", Hide);
+        EventManager.StopListening("Drown", Hide);
     }
 }

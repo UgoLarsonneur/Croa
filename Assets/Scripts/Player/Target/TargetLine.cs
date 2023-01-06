@@ -18,7 +18,8 @@ public class TargetLine : MonoBehaviour
 
     private void Start() {
         EventManager.StartListening("Charge", OnCharge);
-        EventManager.StartListening("Jump", OnJump);
+        EventManager.StartListening("Jump", Hide);
+        EventManager.StartListening("Drown", Hide);
         enabled = false;
     }
 
@@ -30,7 +31,7 @@ public class TargetLine : MonoBehaviour
         _lineRenderer.enabled = true;
     }
 
-    private void OnJump()
+    private void Hide()
     {
         enabled = false;
         _lineRenderer.enabled = false;
@@ -46,5 +47,11 @@ public class TargetLine : MonoBehaviour
         _lineRenderer.material.mainTextureOffset -= new Vector2(scrollSpeed * Time.deltaTime, 0f);
         _lineRenderer.SetPosition(1, point1.position);
         _lineRenderer.SetPosition(0, point0.position);
+    }
+
+    private void OnDestroy() {
+        EventManager.StopListening("Charge", OnCharge);
+        EventManager.StopListening("Jump", Hide);
+        EventManager.StopListening("Drown", Hide);
     }
 }

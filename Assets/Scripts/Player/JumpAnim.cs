@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/**
-*/
+/// <summary>
+/// Gère la durée de l'animation de saut en fonction de la durée du saut
+/// </summary>
 public class JumpAnim : StateMachineBehaviour
 {
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.R))
         {
-            transform.position = Vector3.zero;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
@@ -70,21 +70,6 @@ public class Player : MonoBehaviour
         return MinJumpDuration + (MaxJumpDuration - MinJumpDuration) * charge;
     }
 
-    public void MoveAngle()
-    {
-        float angleDelta = 0f;
-        if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            angleDelta += 1f;
-        }
-        if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.RightArrow))
-        {
-            angleDelta -= 1f;
-        }
-
-        Angle = Mathf.Clamp(Angle + angleDelta * Time.deltaTime * TurnSpeed, -MaxTurnAngle, MaxTurnAngle);
-    }
-
 
     public bool TryLand()
     {
@@ -93,10 +78,17 @@ public class Player : MonoBehaviour
         {
             Platform platform = hit.collider.gameObject.GetComponent<Platform>();
             platform.OnLandedOn();
-            transform.parent = platform.transform; //TODO: remplacer le parent par la mesh de la plateforme
+            transform.parent = platform.transform;
             transform.localPosition = new Vector3(transform.localPosition.x, 0f, transform.localPosition.z);
             return true;
         }
         return false;
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Obstacle") && StateMachine.CurrentState is not PlayerStates.Drowning)
+        {
+            StateMachine.CurrentState = new PlayerStates.Drowning(StateMachine);
+        }
     }
 }

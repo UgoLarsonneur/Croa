@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : MonoBehaviour
 {
+    static public GameManager Instance{get; private set;}
+
     static public bool Quitting = false;
+
+    private void Awake() {
+        Instance = this;
+    }
 
     private void OnApplicationQuit() {
         Quitting = true;
