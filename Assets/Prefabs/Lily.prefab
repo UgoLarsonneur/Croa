@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1515524037}
-  moveSpeed: 1.2
+  moveSpeed: 1.6
 --- !u!95 &1515524037
 Animator:
   serializedVersion: 4

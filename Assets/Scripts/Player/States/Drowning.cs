@@ -8,7 +8,6 @@ namespace PlayerStates
 
         public override void Enter()
         {
-            Debug.Log("Perdu");
 			Owner.transform.parent = null;
             EventManager.TriggerEvent("Drown");
         }

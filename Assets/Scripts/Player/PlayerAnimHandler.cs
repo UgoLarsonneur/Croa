@@ -52,4 +52,11 @@ public class PlayerAnimHandler : MonoBehaviour
     {
         _animator.SetTrigger(_drownTriggerHash);
     }
+
+    private void OnDestroy() {
+        EventManager.StopListening("Charge", LaunchChargeAnim);
+        EventManager.StopListening("Jump", LaunchJumpAnim);
+        EventManager.StopListening("Land", LaunchIdleAnim);
+        EventManager.StopListening("Drown", LaunchDrownAnim);
+    }
 }

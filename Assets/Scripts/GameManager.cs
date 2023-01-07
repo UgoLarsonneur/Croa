@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     }
 
     public static int LastPlatformReached {get; private set;} = 0;
-    public static int NumberOfPlatformReached {get; private set;} = 0;
+    public static int NumberOfPlatformReached {get; private set;} = -1;
 
     public bool DebugMenuEnabled {get; private set;} = false;
 
