@@ -109,6 +109,7 @@ Material:
     - _RippleSlimness: 4
     - _RippleSpeed: 0.8
     - _SampleGI: 0
+    - _ScrollSpeed: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

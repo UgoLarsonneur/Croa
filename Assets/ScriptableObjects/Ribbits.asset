@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dcbd8e95dee0814ea59d0ff46e6fc26, type: 3}
+  m_Name: Ribbits
+  m_EditorClassIdentifier: 
+  sounds:
+  - clip: {fileID: 8300000, guid: 1c04eeb126c5c104ab5a2c02a2c734d5, type: 3}
+    volume: 0.8
+  - clip: {fileID: 8300000, guid: 7147670e9320e79489467070a1cc3c79, type: 3}
+    volume: 1
+  - clip: {fileID: 8300000, guid: 7147670e9320e79489467070a1cc3c79, type: 3}
+    volume: 1
+  - clip: {fileID: 8300000, guid: cd833b462c5004f4db4968b6605b9e7b, type: 3}
+    volume: 1.2
+  - clip: {fileID: 8300000, guid: 2e2089fcf2659e34484bae18bd50c0f6, type: 3}
+    volume: 1
+  - clip: {fileID: 8300000, guid: 44922c0f7f53ee643a2ad4b2403308c1, type: 3}
+    volume: 0.9
+  - clip: {fileID: 8300000, guid: b690e6199646b974e853ebbcde7df87d, type: 3}
+    volume: 0.85

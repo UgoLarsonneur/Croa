@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dcbd8e95dee0814ea59d0ff46e6fc26, type: 3}
+  m_Name: Splashs
+  m_EditorClassIdentifier: 
+  sounds:
+  - clip: {fileID: 8300000, guid: 2a73e9e33baee944bb7bbd85add3e85a, type: 3}
+    volume: 1
+  - clip: {fileID: 8300000, guid: 75cba88be84a5dd4c8fb105f0f9a6ed7, type: 3}
+    volume: 1.2
+  - clip: {fileID: 8300000, guid: 2f8a9e70ed2b4dc4ab9701441d150bf9, type: 3}
+    volume: 1.45
+  - clip: {fileID: 8300000, guid: 334393694fb36fd41bc6c422ff762c93, type: 3}
+    volume: 1.1
+  - clip: {fileID: 8300000, guid: d6eb3ce4ded5cda4a814e809d06c248f, type: 3}
+    volume: 0.8

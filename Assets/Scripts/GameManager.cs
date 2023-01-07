@@ -29,8 +29,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static int LastPlatformReached {get; private set;} = 0;
-    public static int NumberOfPlatformReached {get; private set;} = -1;
+    int lastPlatformReached = 0;
+    public static int LastPlatformReached => Instance.lastPlatformReached;
+
+    private int numberOfPlatformReached = 0;
+    public static int NumberOfPlatformReached => Instance.numberOfPlatformReached;
 
     public bool DebugMenuEnabled {get; private set;} = false;
 
@@ -43,8 +46,8 @@ public class GameManager : MonoBehaviour
 
     public static void UpdatePlatformCounts(int platformNumber)
     {
-        LastPlatformReached = Mathf.Max(platformNumber, LastPlatformReached);
-        ++NumberOfPlatformReached;
+        Instance.lastPlatformReached = Mathf.Max(platformNumber, Instance.lastPlatformReached);
+        ++Instance.numberOfPlatformReached;
     }
 
     private void OnGUI() {
