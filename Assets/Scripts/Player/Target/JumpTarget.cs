@@ -22,7 +22,7 @@ public class JumpTarget : MonoBehaviour
         EventManager.StartListening("Land", OnLand);
         EventManager.StartListening("Charge", OnCharge);
         EventManager.StartListening("Jump", Hide);
-        EventManager.StopListening("Drown", Hide);
+        EventManager.StartListening("Drown", Hide);
 
         maxTarget.transform.localPosition = Vector3.forward * GameManager.Player.getJumpDistance(1f);
         UpdateCurrentChargeTargetPos(0f);

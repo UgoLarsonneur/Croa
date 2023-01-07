@@ -106,6 +106,8 @@ public class PlatformSpawner : MonoBehaviour
             if(Random.Range(0f, 1f) < NonCtriticalPlatformChance)
                 StartCoroutine(SpawnNonCritical(_lastCriticalPlatform.transform.position, Random.Range(0f, cycleDuration)));
 
+            CheckForRapidMode();
+
             yield return null;
         }
 
@@ -121,7 +123,6 @@ public class PlatformSpawner : MonoBehaviour
         GameObject platformToSpawn = platformData.chooseSafePlatform();
 
         _lastCriticalPlatform = Spawn(spawnPos, platformToSpawn);
-        //Debug.Log("Critical");
         yield return null;
     }
 
@@ -141,7 +142,6 @@ public class PlatformSpawner : MonoBehaviour
             platformToSpawn = platformData.chooseSafePlatform();
         
         Spawn(spawnPos, platformToSpawn);
-        //Debug.Log("NonCritical");
         yield return null;
     }
 
@@ -214,5 +214,9 @@ public class PlatformSpawner : MonoBehaviour
     public void RemovePlatform(Platform p)
     {
         platforms.Remove(p);
+    }
+
+    private void OnDestroy() {
+        EventManager.StopListening("Land", CheckForRapidMode);
     }
 }
