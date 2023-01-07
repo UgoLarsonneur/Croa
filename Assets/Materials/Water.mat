@@ -122,7 +122,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     - _minAlpha: 0.5
-    - _minalpha: 0.4
+    - _minalpha: 0.35
     - _throughColorStrength: 1.42
     - _tiling: 0.1
     - _waveHeight: 0.3
