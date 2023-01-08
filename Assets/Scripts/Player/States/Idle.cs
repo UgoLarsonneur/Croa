@@ -16,11 +16,11 @@ namespace PlayerStates
             }
             
             float angleDelta = 0f;
-            if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             {
                 angleDelta += 1f;
             }
-            if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.RightArrow))
+            if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
                 angleDelta -= 1f;
             }
