@@ -37,17 +37,20 @@ public class GameManager : MonoBehaviour
 
     public bool DebugMenuEnabled {get; private set;} = false;
 
-    private void Update() {
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            DebugMenuEnabled = !DebugMenuEnabled;
-        }
-    }
+
 
     public static void UpdatePlatformCounts(int platformNumber)
     {
         Instance.lastPlatformReached = Mathf.Max(platformNumber, Instance.lastPlatformReached);
         ++Instance.numberOfPlatformReached;
+    }
+
+    #if UNITY_EDITOR
+    private void Update() {
+        if(Input.GetKeyDown(KeyCode.T))
+        {
+            DebugMenuEnabled = !DebugMenuEnabled;
+        }
     }
 
     private void OnGUI() {
@@ -63,5 +66,6 @@ public class GameManager : MonoBehaviour
         GUILayout.Box("Current semo platform spawn chance: " + Spawner.SemiSafePlatformChance);
         GUILayout.Box("Current unsafe platform spawn chance: " + Spawner.UnsafePlatformChance);
     }
+    #endif
     
 }
