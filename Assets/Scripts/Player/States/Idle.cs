@@ -10,13 +10,13 @@ namespace PlayerStates
 
         public override void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Space))
+            if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
             {
                 StateMachine.CurrentState = new JumpPhase(StateMachine);
             }
             
             float angleDelta = 0f;
-            if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow))
+            if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
                 angleDelta += 1f;
             }

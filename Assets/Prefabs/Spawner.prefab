@@ -49,11 +49,11 @@ MonoBehaviour:
   spawnDelay: 2.5
   rapidSpawnThreshold: 0.85
   normalSpawnThreshold: 1.75
-  stopSpawnThreshold: 2.3
-  spawnAreaWidth: 7.5
+  stopSpawnThreshold: 2.2
+  spawnAreaWidth: 7.55
   maxSpawnAngle: 65
-  minCriticalDistance: 0.7
-  maxCriticalDistance: 0.9
+  minCriticalDistance: 0.65
+  maxCriticalDistance: 0.85
   minNonCriticalDistance: 0.5
   maxNonCriticalDistance: 0.8
   unsafePlatformChanceBySpawnedCount:
@@ -78,8 +78,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.10650619
     - serializedVersion: 3
-      time: 100
-      value: 1
+      time: 90
+      value: 0.95
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 20
-      value: 0.5
+      value: 0.65
       inSlope: 0.0023319863
       outSlope: 0.0023319863
       tangentMode: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
       inWeight: 0.21494783
       outWeight: 0.050021604
     - serializedVersion: 3
-      time: 200
+      time: 150
       value: 1
       inSlope: 0
       outSlope: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 100
+      time: 88
       value: 0.1
       inSlope: 0
       outSlope: 0

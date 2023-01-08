@@ -63,6 +63,7 @@ public class AudioManager : Singleton<AudioManager>
     protected override void OnDestroy() {
         EventManager.StopListening("Jump", OnJump);
         EventManager.StopListening("Land", OnLand);
+        EventManager.StopListening("Drown", OnDrown);
         base.OnDestroy();
     }
 }
