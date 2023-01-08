@@ -11,16 +11,22 @@ public class PlatformData : ScriptableObject {
         public float weight;
     }
 
+    //Je n'ai pas eu le temps d'en ajouter, mais l'intêret est qu'il pourrait y avoir plusieurs plateforme de chaque type différentes...
     [SerializeField] private List<WeightedPlatform> safePlatform;
-    //public List<GameObject> GoodPlatform {get;}
 
-    [SerializeField] List<WeightedPlatform> unsafePlatform;
-    //public List<GameObject> BadPlatform {get;}
+    [SerializeField] private List<WeightedPlatform> semiSafePlatform;
+
+    [SerializeField] private List<WeightedPlatform> unsafePlatform; //Can disapear: are not part of the critical path, to ensure there is always a path forward
 
 
     public GameObject chooseSafePlatform()
     {
         return choosePlatform(safePlatform);
+    }
+
+    public GameObject chooseSemiSafePlatform()
+    {
+        return choosePlatform(semiSafePlatform);
     }
 
     public GameObject chooseUnsafePlatform()

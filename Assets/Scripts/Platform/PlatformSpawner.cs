@@ -32,6 +32,12 @@ public class PlatformSpawner : MonoBehaviour
             return unsafePlatformChanceBySpawnedCount.Evaluate(SpawnedCount);
         }
     }
+    [SerializeField] AnimationCurve semiSafePlatformChanceBySpawnedCount;
+    public float SemiSafePlatformChance {
+        get {
+            return semiSafePlatformChanceBySpawnedCount.Evaluate(SpawnedCount);
+        }
+    }
     [SerializeField] AnimationCurve nonCtriticalPlatformChanceBySpawnedCount;
     public float NonCtriticalPlatformChance {
         get {
@@ -45,7 +51,7 @@ public class PlatformSpawner : MonoBehaviour
     private int lastUnsafePlatform = 0;
     float spawnSpeedMultiplier = 1f;
 
-    const int spawnMaxTryCount = 100;
+    const int spawnMaxTryCount = 200;
     
 
     private void Awake() {
@@ -72,7 +78,7 @@ public class PlatformSpawner : MonoBehaviour
 
     IEnumerator ActivateRapidSpawn()
     {
-        spawnSpeedMultiplier = 5f;
+        spawnSpeedMultiplier = 4f;
 
         //while(GetRemainingPlatformCount() <= normalSpawnThreshold)
         while(GetPlayerDistanceFromLastCritical() < normalSpawnThreshold)
@@ -110,17 +116,22 @@ public class PlatformSpawner : MonoBehaviour
 
             yield return null;
         }
-
-        yield return null;
     }
 
 
-    //Each critical platform is safe and jumpable from the previous one
+    //Each critical platform is safe or semi safe and jumpable from the previous one
     IEnumerator SpawnCritical(float delay)
     {
         yield return new WaitForSeconds(delay);
         Vector3 spawnPos = FindPos(_lastCriticalPlatform.transform.position, true);
-        GameObject platformToSpawn = platformData.chooseSafePlatform();
+
+        GameObject platformToSpawn;
+        if(Random.Range(0f, 1f) < SemiSafePlatformChance)
+        {
+            platformToSpawn = platformData.chooseSemiSafePlatform();
+        }
+        else 
+            platformToSpawn = platformData.chooseSafePlatform();
 
         _lastCriticalPlatform = Spawn(spawnPos, platformToSpawn);
         yield return null;
@@ -136,6 +147,11 @@ public class PlatformSpawner : MonoBehaviour
         if(Random.Range(0f, 1f) < UnsafePlatformChance)
         {
             platformToSpawn = platformData.chooseUnsafePlatform();
+            lastUnsafePlatform = SpawnedCount;
+        }
+        else if(Random.Range(0f, 1f) < SemiSafePlatformChance)
+        {
+            platformToSpawn = platformData.chooseSemiSafePlatform();
             lastUnsafePlatform = SpawnedCount;
         }
         else
@@ -156,6 +172,9 @@ public class PlatformSpawner : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Finds a position for the next platform
+    /// </summary>
     Vector3 FindPos(Vector3 source, bool critical = false)
     {
         Vector3 spawnPos = source + Vector3.forward * GameManager.Player.getJumpDistance(Random.Range(0f, 1f)); //default value
@@ -174,13 +193,17 @@ public class PlatformSpawner : MonoBehaviour
         return spawnPos;
     }
 
-
+    /// <summary>
+    /// Computes the position from a position, distance and angle
+    /// </summary>
     Vector3 GetNextPos(Vector3 source, float dist, float angle)
     {
         return  source + Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward * dist;
     }
 
-
+    /// <summary>
+    /// Checks if pos is a valid position for a platform
+    /// </summary>
     bool IsValidSpawnPos(Vector3 pos)
     {
         //Is in spawn area
@@ -213,7 +236,8 @@ public class PlatformSpawner : MonoBehaviour
 
     public void RemovePlatform(Platform p)
     {
-        platforms.Remove(p);
+        if(platforms != null)
+            platforms.Remove(p);
     }
 
     private void OnDestroy() {

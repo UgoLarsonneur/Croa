@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MovingForwardPlatform : Platform
 {
-    [SerializeField] float moveSpeed;
 
 
     protected override void OnAwake() {
@@ -16,7 +15,7 @@ public class MovingForwardPlatform : Platform
     protected override void OnUpdate()
     {
         base.OnUpdate();
-        transform.position -= Vector3.forward * moveSpeed * Time.deltaTime * GameManager.GlobalSpeed;
+        transform.position -= Vector3.forward * Time.deltaTime * GameManager.GlobalSpeed;
     }
 
     private void OnTriggerEnter(Collider other) {

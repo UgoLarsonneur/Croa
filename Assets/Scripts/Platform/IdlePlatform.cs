@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class IdlePlatform : Platform
 {
-
-    private void OnTriggerEnter(Collider other) {
-        
-        /* if(other.gameObject.layer == LayerMask.NameToLayer("Platform"))
-        {
-            OnSink();
-        } */
+    //TODO: faire marcher
+    /*private void Start() {
+        EventManager.StartListening("Land", OnSink);
     }
+
+    protected override void OnDestroy() {
+        EventManager.StopListening("Land", OnSink);
+    }*/
     
 }

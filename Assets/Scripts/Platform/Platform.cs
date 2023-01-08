@@ -1,8 +1,14 @@
 using UnityEngine;
+using System;
 
 public class Platform : MonoBehaviour
 {
     [SerializeField] protected Animator animator;
+    public Animator Animator => animator;
+
+    public Action OnLandDelegate;
+
+
     protected Collider _collider;
 
     public int Number{get; set;} //first platform is platform 0, next is 1, next is 2,...
@@ -36,7 +42,8 @@ public class Platform : MonoBehaviour
         animator.SetTrigger("Shake");
         isHostingPlayer = true;
         GameManager.UpdatePlatformCounts(Number);
-        //animator.SetTrigger("LandedOn");
+        if(OnLandDelegate != null)
+            OnLandDelegate();
     }
 
 
@@ -49,7 +56,7 @@ public class Platform : MonoBehaviour
         isHostingPlayer = false;
     }
 
-    protected void OnSink()
+    public void OnSink()
     {
         _collider.enabled = false;
 
@@ -61,7 +68,7 @@ public class Platform : MonoBehaviour
     }
 
 
-    private void OnDestroy() {
+    protected virtual void OnDestroy() {
         if(GameManager.Quitting)
             return;
         GameManager.Spawner.RemovePlatform(this);

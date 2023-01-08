@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
         GUILayout.Box("Number of platform reached: " + NumberOfPlatformReached);
         GUILayout.Box("Last platform reached: " + LastPlatformReached);
         GUILayout.Box("Current non critical platform spawn chance: " + Spawner.NonCtriticalPlatformChance);
+        GUILayout.Box("Current semo platform spawn chance: " + Spawner.SemiSafePlatformChance);
         GUILayout.Box("Current unsafe platform spawn chance: " + Spawner.UnsafePlatformChance);
     }
     

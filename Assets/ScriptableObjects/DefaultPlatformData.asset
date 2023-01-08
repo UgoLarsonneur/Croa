@@ -16,7 +16,11 @@ MonoBehaviour:
   - platform: {fileID: 1806552274920874041, guid: 8f8de9ffaa90ada468cd824023c179ae,
       type: 3}
     weight: 1
+  semiSafePlatform:
+  - platform: {fileID: 1806552274920874041, guid: 87e2b77ae91bd7b46b5bfb853c2ae902,
+      type: 3}
+    weight: 1
   unsafePlatform:
-  - platform: {fileID: 2060690746725278416, guid: 321454f2fba8e0c4cab6f127411eb12b,
+  - platform: {fileID: 1806552274920874041, guid: 82367496ef52b26469ae8dc1923e1b9d,
       type: 3}
     weight: 1
