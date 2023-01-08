@@ -6,6 +6,7 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField] AudioSource source;
     [SerializeField] SoundClips ribbits;
     [SerializeField] SoundClips splashs;
+    [SerializeField] AudioClip drownSound;
 
     public static float Volume {get; set;} = 1f;
 
@@ -18,6 +19,7 @@ public class AudioManager : Singleton<AudioManager>
         
         EventManager.StartListening("Jump", OnJump);
         EventManager.StartListening("Land", OnLand);
+        EventManager.StartListening("Drown", OnDrown);
     }
     
     private void OnJump()
@@ -28,6 +30,11 @@ public class AudioManager : Singleton<AudioManager>
     private void OnLand()
     {
         PlaySplash();
+    }
+
+    private void OnDrown()
+    {
+        PlaySound(drownSound, 3f);
     }
     
     public static void PlayRibbit()

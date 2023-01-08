@@ -11,9 +11,9 @@ public class PlatformSpawner : MonoBehaviour
     [SerializeField] float spawnDelay;
 
     // Ces valeurs sont relative aux distances de sauts: 0 correspond à la distance de saut minimale, et 1 la distance de saut maximale
-    [SerializeField] int rapidSpawnThreshold; //if the distance between the last critical platform and the player is below this treshold, activate rapid spawn mode
-    [SerializeField] int normalSpawnThreshold; //if the distance between the last critical platform and the player is above this treshold, resume normal spawn speed
-    [SerializeField] int stopSpawnThreshold; //if the distance between the last critical platform and the player is above this treshold, stop spawning
+    [SerializeField] float rapidSpawnThreshold; //if the distance between the last critical platform and the player is below this treshold, activate rapid spawn mode
+    [SerializeField] float normalSpawnThreshold; //if the distance between the last critical platform and the player is above this treshold, resume normal spawn speed
+    [SerializeField] float stopSpawnThreshold; //if the distance between the last critical platform and the player is above this treshold, stop spawning
     
     [SerializeField] float spawnAreaWidth;
     [SerializeField] float maxSpawnAngle;
@@ -190,7 +190,7 @@ public class PlatformSpawner : MonoBehaviour
         }
 
         //Is not to close to other platforms
-        float minDist = GameManager.Player.getJumpDistance(0.1f);
+        float minDist = GameManager.Player.getJumpDistance(0.15f);
         foreach (Platform item in platforms)
         {
             if(Vector3.Distance(item.transform.position, pos) < minDist)

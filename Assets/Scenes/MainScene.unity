@@ -612,6 +612,7 @@ MonoBehaviour:
   source: {fileID: 827898134}
   ribbits: {fileID: 11400000, guid: 89f2a2c851799a249a33ea71f87eaec3, type: 2}
   splashs: {fileID: 11400000, guid: 06f6d450f8dd62749a9122889a96a8cf, type: 2}
+  drownSound: {fileID: 8300000, guid: 07bef7aeb234ca34e95bfe71b0d04f87, type: 3}
 --- !u!82 &827898134
 AudioSource:
   m_ObjectHideFlags: 0
@@ -624,7 +625,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 50e3b125212c0bd4ebac6bf0dc652068, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.6
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -755,7 +756,7 @@ Transform:
   - {fileID: 1298265252}
   - {fileID: 236151378}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1092597813 stripped
 Transform:
@@ -1145,10 +1146,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1258648851171658411, guid: 38ffc283973a36d4bbe4c4fff53f7a36,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 1258648851930888890, guid: 38ffc283973a36d4bbe4c4fff53f7a36,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1258648851930888890, guid: 38ffc283973a36d4bbe4c4fff53f7a36,
         type: 3}
@@ -1703,6 +1709,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 386131660183717942, guid: 70663acd5fef5bf4f8bce9421e9dad1e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.00000000826978
+      objectReference: {fileID: 0}
+    - target: {fileID: 1847921715170356473, guid: 70663acd5fef5bf4f8bce9421e9dad1e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.00000046935293
+      objectReference: {fileID: 0}
+    - target: {fileID: 5528460907371952511, guid: 70663acd5fef5bf4f8bce9421e9dad1e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0000003780945
+      objectReference: {fileID: 0}
+    - target: {fileID: 5528460907371952511, guid: 70663acd5fef5bf4f8bce9421e9dad1e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0000031120762
+      objectReference: {fileID: 0}
+    - target: {fileID: 5800400583673060444, guid: 70663acd5fef5bf4f8bce9421e9dad1e,
+        type: 3}
+      propertyPath: maxTurnAngle
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 5800400583673060446, guid: 70663acd5fef5bf4f8bce9421e9dad1e,
         type: 3}
       propertyPath: m_RootOrder
@@ -1763,6 +1794,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7691040452371670094, guid: 70663acd5fef5bf4f8bce9421e9dad1e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.10552688
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70663acd5fef5bf4f8bce9421e9dad1e, type: 3}
 --- !u!4 &7007396786676387332
@@ -1799,11 +1835,11 @@ MonoBehaviour:
   normalSpawnThreshold: 2
   stopSpawnThreshold: 4
   spawnAreaWidth: 7.5
-  maxSpawnAngle: 75
-  minCriticalDistance: 0.65
-  maxCriticalDistance: 0.8
+  maxSpawnAngle: 65
+  minCriticalDistance: 0.7
+  maxCriticalDistance: 0.9
   minNonCriticalDistance: 0.5
-  maxNonCriticalDistance: 0.9
+  maxNonCriticalDistance: 0.8
   unsafePlatformChanceBySpawnedCount:
     serializedVersion: 2
     m_Curve:

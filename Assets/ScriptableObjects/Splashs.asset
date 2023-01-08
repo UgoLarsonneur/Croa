@@ -16,10 +16,10 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: 2a73e9e33baee944bb7bbd85add3e85a, type: 3}
     volume: 1
   - clip: {fileID: 8300000, guid: 75cba88be84a5dd4c8fb105f0f9a6ed7, type: 3}
-    volume: 1.2
+    volume: 1.5
   - clip: {fileID: 8300000, guid: 2f8a9e70ed2b4dc4ab9701441d150bf9, type: 3}
-    volume: 1.45
+    volume: 1.5
   - clip: {fileID: 8300000, guid: 334393694fb36fd41bc6c422ff762c93, type: 3}
-    volume: 1.1
+    volume: 1.2
   - clip: {fileID: 8300000, guid: d6eb3ce4ded5cda4a814e809d06c248f, type: 3}
-    volume: 0.8
+    volume: 0.7

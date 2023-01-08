@@ -21,7 +21,8 @@ public class MovingForwardPlatform : Platform
 
     private void OnTriggerEnter(Collider other) {
         
-        if(other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        //if((other.gameObject.layer & LayerMask.GetMask("Obstacle", "Platform")) == other.gameObject.layer)
+        if(other.gameObject.layer == LayerMask.NameToLayer("Obstacle") || other.gameObject.layer == LayerMask.NameToLayer("Platform"))
         {
             OnSink();
         }

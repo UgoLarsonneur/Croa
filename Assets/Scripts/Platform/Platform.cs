@@ -33,6 +33,7 @@ public class Platform : MonoBehaviour
 
     virtual public void OnLandedOn()
     {
+        animator.SetTrigger("Shake");
         isHostingPlayer = true;
         GameManager.UpdatePlatformCounts(Number);
         //animator.SetTrigger("LandedOn");
