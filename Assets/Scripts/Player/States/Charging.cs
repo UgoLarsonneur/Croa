@@ -36,7 +36,7 @@ namespace PlayerStates
         public override void Update()
         {
             SuperState.Charge = Mathf.Clamp01((Time.time - _startTime) / Owner.ChargeDuration);
-            if(Input.GetKeyUp(KeyCode.Space) || SuperState.Charge >= 1f)
+            if(Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Z) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.UpArrow) || SuperState.Charge >= 1f)
             {
                 StateMachine.CurrentState = new Jumping(SuperState); 
             }

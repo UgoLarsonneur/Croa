@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c29b5e084176db43b2aec9c88fca2ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crumblingDuration: 9
+  crumblingDuration: 6.3
   bigWarningDuration: 2
 --- !u!1 &8040590862649637182
 GameObject:

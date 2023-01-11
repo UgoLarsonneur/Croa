@@ -10,7 +10,7 @@ namespace PlayerStates
 
         public override void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Z))
             {
                 StateMachine.CurrentState = new JumpPhase(StateMachine);
             }
